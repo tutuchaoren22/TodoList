@@ -45,5 +45,22 @@
         app:layout_constraintStart_toStartOf="@id/margin_left"
         app:layout_constraintTop_toTopOf="@id/logo_top" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.4" />
 
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:autofillHints="@string/user_name"
+        android:background="@drawable/login_input_background"
+        android:hint="@string/user_name"
+        android:inputType="text"
+        android:paddingVertical="@dimen/login_input_padding_vertical"
+        app:layout_constraintEnd_toEndOf="@id/margin_right"
+        app:layout_constraintStart_toStartOf="@id/margin_left"
+        app:layout_constraintTop_toTopOf="@id/user_name" />
 </androidx.constraintlayout.widget.ConstraintLayout>

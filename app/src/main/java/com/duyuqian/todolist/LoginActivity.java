@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 
 import java.util.regex.Pattern;
@@ -13,6 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
+import butterknife.OnTextChanged;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -24,6 +26,10 @@ public class LoginActivity extends AppCompatActivity {
     String validUserName;
     @BindString(R.string.valid_password)
     String validPassWord;
+    @BindString(R.string.pattern_user_name)
+    String patternOfUserName;
+    @BindString(R.string.pattern_password)
+    String patternOfPassWord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,29 +44,28 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    @OnFocusChange({R.id.user_name, R.id.password})
-    public void setOnFocusChangeError(EditText view, boolean focused) {
-        String input = view.getText().toString();
-        switch (view.getId()) {
-            case R.id.user_name:
-                if (!focused) {
-                    String pattern = "^[a-zA-Z0-9]{3,12}$";
-                    if (!Pattern.compile(pattern).matcher(input).matches()) {
-                        view.setError(validUserName);
-                    }
-                }
-                break;
-            case R.id.password:
-                if (!focused) {
-                    String pattern = "[\\s\\S]{6,18}";
-                    if (!Pattern.compile(pattern).matcher(input).matches()) {
-                        view.setError(validPassWord);
-                    }
-                }
-                break;
-            default:
-                break;
-        }
+    @OnTextChanged(R.id.user_name)
+    public void setOnUserNameChangedError() {
+        validInput(userName, patternOfUserName);
     }
 
+    @OnTextChanged(R.id.password)
+    public void setOnPassWordChangedError() {
+        validInput(passWord, patternOfPassWord);
+    }
+
+    public void validInput(EditText input, String pattern) {
+        if (!Pattern.compile(pattern).matcher(input.getText().toString()).matches()) {
+            switch (input.getId()) {
+                case R.id.user_name:
+                    input.setError(validUserName);
+                    break;
+                case R.id.password:
+                    input.setError(validPassWord);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }

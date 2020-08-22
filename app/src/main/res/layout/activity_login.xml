@@ -82,4 +82,23 @@
         app:layout_constraintEnd_toEndOf="@id/margin_right"
         app:layout_constraintStart_toStartOf="@id/margin_left"
         app:layout_constraintTop_toTopOf="@id/password" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/log_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.7" />
+
+    <Button
+        android:id="@+id/log_in_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/login_button_not_allow_background"
+        android:paddingVertical="@dimen/login_button_padding_vertical"
+        android:text="@string/login"
+        android:textSize="@dimen/login_button_text_size"
+        app:layout_constraintEnd_toEndOf="@id/margin_right"
+        app:layout_constraintStart_toStartOf="@id/margin_left"
+        app:layout_constraintTop_toTopOf="@id/log_in" />
 </androidx.constraintlayout.widget.ConstraintLayout>

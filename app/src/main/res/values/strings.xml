@@ -3,4 +3,5 @@
     <string name="logo_image">Here is logo image</string>
     <string name="user_name">用户名</string>
     <string name="password">密码</string>
+    <string name="login">登录</string>
 </resources>

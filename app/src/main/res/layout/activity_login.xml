@@ -8,28 +8,28 @@
     tools:context=".LoginActivity">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/margin_left"
+        android:id="@+id/margin_left_line"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.1" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/margin_right"
+        android:id="@+id/margin_right_line"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.9" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/logo_top"
+        android:id="@+id/logo_top_line"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.1" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/logo_bottom"
+        android:id="@+id/logo_bottom_line"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -40,19 +40,20 @@
         android:layout_height="0dp"
         android:contentDescription="@string/logo_image"
         android:src="@drawable/todo_list_logo"
-        app:layout_constraintBottom_toBottomOf="@id/logo_bottom"
-        app:layout_constraintEnd_toEndOf="@id/margin_right"
-        app:layout_constraintStart_toStartOf="@id/margin_left"
-        app:layout_constraintTop_toTopOf="@id/logo_top" />
+        app:layout_constraintBottom_toBottomOf="@id/logo_bottom_line"
+        app:layout_constraintEnd_toEndOf="@id/margin_right_line"
+        app:layout_constraintStart_toStartOf="@id/margin_left_line"
+        app:layout_constraintTop_toTopOf="@id/logo_top_line" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/user_name"
+        android:id="@+id/user_name_line"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.4" />
 
     <EditText
+        android:id="@+id/user_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:autofillHints="@string/user_name"
@@ -60,18 +61,19 @@
         android:hint="@string/user_name"
         android:inputType="text"
         android:paddingVertical="@dimen/login_input_padding_vertical"
-        app:layout_constraintEnd_toEndOf="@id/margin_right"
-        app:layout_constraintStart_toStartOf="@id/margin_left"
-        app:layout_constraintTop_toTopOf="@id/user_name" />
+        app:layout_constraintEnd_toEndOf="@id/margin_right_line"
+        app:layout_constraintStart_toStartOf="@id/margin_left_line"
+        app:layout_constraintTop_toTopOf="@id/user_name_line" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/password"
+        android:id="@+id/password_line"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.5" />
 
     <EditText
+        android:id="@+id/password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:autofillHints="@string/password"
@@ -79,12 +81,12 @@
         android:hint="@string/password"
         android:inputType="textPassword"
         android:paddingVertical="@dimen/login_input_padding_vertical"
-        app:layout_constraintEnd_toEndOf="@id/margin_right"
-        app:layout_constraintStart_toStartOf="@id/margin_left"
-        app:layout_constraintTop_toTopOf="@id/password" />
+        app:layout_constraintEnd_toEndOf="@id/margin_right_line"
+        app:layout_constraintStart_toStartOf="@id/margin_left_line"
+        app:layout_constraintTop_toTopOf="@id/password_line" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/log_in"
+        android:id="@+id/log_in_line"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -98,7 +100,7 @@
         android:paddingVertical="@dimen/login_button_padding_vertical"
         android:text="@string/login"
         android:textSize="@dimen/login_button_text_size"
-        app:layout_constraintEnd_toEndOf="@id/margin_right"
-        app:layout_constraintStart_toStartOf="@id/margin_left"
-        app:layout_constraintTop_toTopOf="@id/log_in" />
+        app:layout_constraintEnd_toEndOf="@id/margin_right_line"
+        app:layout_constraintStart_toStartOf="@id/margin_left_line"
+        app:layout_constraintTop_toTopOf="@id/log_in_line" />
 </androidx.constraintlayout.widget.ConstraintLayout>

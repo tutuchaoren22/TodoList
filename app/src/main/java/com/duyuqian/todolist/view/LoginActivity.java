@@ -13,13 +13,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.duyuqian.todolist.R;
-import com.duyuqian.todolist.model.User;
-import com.duyuqian.todolist.others.MD5Utils;
 import com.duyuqian.todolist.others.TodoListConstant;
 import com.duyuqian.todolist.viewmodel.LoginViewModel;
 
-import java.util.List;
-import java.util.regex.Pattern;
+import java.util.Map;
 
 import butterknife.BindColor;
 import butterknife.BindDrawable;
@@ -40,11 +37,11 @@ public class LoginActivity extends AppCompatActivity {
     @BindString(R.string.valid_user_name)
     String validUserName;
     @BindString(R.string.wrong_user_name)
-    String wrongUserNameImg;
+    String wrongUserNameInf;
     @BindString(R.string.valid_password)
     String validPassWord;
     @BindString(R.string.wrong_password)
-    String wrongPassWordImg;
+    String wrongPassWordInf;
     @BindString(R.string.pattern_user_name)
     String patternOfUserName;
     @BindString(R.string.pattern_password)
@@ -62,27 +59,24 @@ public class LoginActivity extends AppCompatActivity {
     public void onClick() {
         if (isLegalOfUserName && isLegalOfPassWord && isUserInDB()) {
             setLoginStatus();
-            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-            startActivity(intent);
-            finish();
+            skipToHomePage();
         }
     }
 
     @OnTextChanged(R.id.user_name)
     public void setOnUserNameChangedError() {
-        isLegalOfUserName = validInput(userNameInput, patternOfUserName);
+        isLegalOfUserName = loginViewModel.validInput(userNameInput, patternOfUserName, validUserName);
         updateLoginBtnStyle();
     }
 
     @OnTextChanged(R.id.password)
     public void setOnPassWordChangedError() {
-        isLegalOfPassWord = validInput(passWordInput, patternOfPassWord);
+        isLegalOfPassWord = loginViewModel.validInput(passWordInput, patternOfPassWord, validPassWord);
         updateLoginBtnStyle();
     }
 
     private boolean isLegalOfUserName;
     private boolean isLegalOfPassWord;
-    private List<User> userList;
     private SharedPreferences sharedPref;
     private LoginViewModel loginViewModel;
 
@@ -90,9 +84,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getLoginStatus()) {
-            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-            startActivity(intent);
-            finish();
+            skipToHomePage();
         } else {
             LoginViewModel.LoginViewModelFactory factory = new LoginViewModel.LoginViewModelFactory();
             ViewModelProvider viewModelProvider = new ViewModelProvider(this, factory);
@@ -103,31 +95,9 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     loginViewModel = viewModelProvider.get(LoginViewModel.class);
-                    userList = loginViewModel.getUserList();
                 }
             }.start();
-
         }
-    }
-
-
-    public boolean validInput(EditText input, String pattern) {
-        boolean isLegalInput = false;
-        if (!Pattern.compile(pattern).matcher(input.getText().toString()).matches()) {
-            switch (input.getId()) {
-                case R.id.user_name:
-                    input.setError(validUserName);
-                    break;
-                case R.id.password:
-                    input.setError(validPassWord);
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            isLegalInput = true;
-        }
-        return isLegalInput;
     }
 
     public void updateLoginBtnStyle() {
@@ -141,21 +111,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public boolean isUserInDB() {
-        boolean hasUserName = false;
-        boolean hasUserPassword = false;
-        for (User user : userList) {
-            if (userNameInput.getText().toString().equals(user.getName())) {
-                hasUserName = true;
-                if (MD5Utils.md5Password(passWordInput.getText().toString()).equals(user.getPassword())) {
-                    hasUserPassword = true;
-                    break;
-                }
-            }
-        }
+        Map<String, Boolean> isUserInDataBase = loginViewModel.isUserInDB(userNameInput.getText().toString(), passWordInput.getText().toString());
+        boolean hasUserName = isUserInDataBase.containsKey("hasUserName") && isUserInDataBase.get("hasUserName");
+        boolean hasUserPassword = isUserInDataBase.containsKey("hasUserPassword") && isUserInDataBase.get("hasUserPassword");
         if (!hasUserName) {
-            Toast.makeText(this, wrongUserNameImg, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, wrongUserNameInf, Toast.LENGTH_LONG).show();
         } else if (!hasUserPassword) {
-            Toast.makeText(this, wrongPassWordImg, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, wrongPassWordInf, Toast.LENGTH_LONG).show();
         }
         return hasUserName && hasUserPassword;
     }
@@ -168,5 +130,11 @@ public class LoginActivity extends AppCompatActivity {
     public void setLoginStatus() {
         sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         sharedPref.edit().putBoolean(TodoListConstant.LOGIN_STATUS, true).apply();
+    }
+
+    public void skipToHomePage() {
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

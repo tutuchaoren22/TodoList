@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 
 import com.duyuqian.todolist.others.TodoListConstant;
 
-@Database(entities = {User.class}, version = 1)
+@Database(entities = {User.class}, version = 1,exportSchema = false)
 public abstract class LocalDataSource extends RoomDatabase {
     private static LocalDataSource localDataSource;
 

@@ -5,9 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.duyuqian.todolist.model.User;
+import com.duyuqian.todolist.others.MD5Utils;
+import com.duyuqian.todolist.repository.LoginRepository;
+
+import java.util.List;
 import java.util.regex.Pattern;
 
 import butterknife.BindColor;
@@ -21,9 +28,9 @@ import butterknife.OnTextChanged;
 public class LoginActivity extends AppCompatActivity {
 
     @BindView(R.id.user_name)
-    EditText userName;
+    EditText userNameInput;
     @BindView(R.id.password)
-    EditText passWord;
+    EditText passWordInput;
     @BindView(R.id.log_in_btn)
     Button loginBtn;
     @BindString(R.string.valid_user_name)
@@ -38,24 +45,37 @@ public class LoginActivity extends AppCompatActivity {
     Drawable legalLoginBg;
     @BindDrawable(R.drawable.login_button_not_allow_background)
     Drawable illegalLoginBg;
-
     @BindColor(R.color.white)
     int white;
     @BindColor(R.color.black)
     int black;
-    boolean isLegalOfUserName;
-    boolean isLegalOfPassWord;
+
+
+    private boolean isLegalOfUserName;
+    private boolean isLegalOfPassWord;
+    private LoginRepository repository;
+    private List<User> userList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        new Thread() {
+            @Override
+            public void run() {
+                repository = new LoginRepository();
+                userList = repository.getUserList();
+            }
+        }.start();
+
     }
+
 
     @OnClick(R.id.log_in_btn)
     public void onClick() {
-        if (isLegalOfUserName && isLegalOfPassWord) {
+        if (isLegalOfUserName && isLegalOfPassWord && isUserInDB()) {
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(intent);
             finish();
@@ -64,13 +84,13 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnTextChanged(R.id.user_name)
     public void setOnUserNameChangedError() {
-        isLegalOfUserName = validInput(userName, patternOfUserName);
+        isLegalOfUserName = validInput(userNameInput, patternOfUserName);
         updateLoginBtnStyle();
     }
 
     @OnTextChanged(R.id.password)
     public void setOnPassWordChangedError() {
-        isLegalOfPassWord = validInput(passWord, patternOfPassWord);
+        isLegalOfPassWord = validInput(passWordInput, patternOfPassWord);
         updateLoginBtnStyle();
     }
 
@@ -101,5 +121,26 @@ public class LoginActivity extends AppCompatActivity {
             loginBtn.setBackground(illegalLoginBg);
             loginBtn.setTextColor(black);
         }
+    }
+
+    public boolean isUserInDB() {
+        boolean hasUserName = false;
+        boolean hasUserPassword = false;
+        for (User user : userList) {
+            Log.e("TAG", user.getName() );
+            if (userNameInput.getText().toString().equals(user.getName())) {
+                hasUserName = true;
+                if (MD5Utils.md5Password(passWordInput.getText().toString()).equals(user.getPassword())) {
+                    hasUserPassword = true;
+                    break;
+                }
+            }
+        }
+        if (!hasUserName) {
+            Toast.makeText(this, "用户名错误", Toast.LENGTH_LONG).show();
+        } else if (!hasUserPassword) {
+            Toast.makeText(this, "密码错误", Toast.LENGTH_LONG).show();
+        }
+        return hasUserName && hasUserPassword;
     }
 }

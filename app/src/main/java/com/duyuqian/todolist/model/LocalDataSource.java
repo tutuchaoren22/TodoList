@@ -6,12 +6,13 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import com.duyuqian.todolist.model.task.Task;
 import com.duyuqian.todolist.model.task.TaskDao;
 import com.duyuqian.todolist.model.user.User;
 import com.duyuqian.todolist.model.user.UserDao;
 import com.duyuqian.todolist.others.TodoListConstant;
 
-@Database(entities = {User.class}, version = 1, exportSchema = false)
+@Database(entities = {User.class, Task.class}, version = 1, exportSchema = false)
 public abstract class LocalDataSource extends RoomDatabase {
     private static LocalDataSource localDataSource;
 

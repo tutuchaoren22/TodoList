@@ -2,17 +2,22 @@ package com.duyuqian.todolist.view;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.duyuqian.todolist.R;
+import com.duyuqian.todolist.model.task.Task;
 
 import java.util.Calendar;
 
@@ -28,6 +33,12 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
     EditText title;
     @BindView(R.id.finish_button)
     Button finishBtn;
+    @BindView(R.id.description_input)
+    EditText description;
+    @BindView(R.id.has_done_check)
+    CheckBox hasDone;
+    @BindView(R.id.remind_switch)
+    SwitchCompat isReminded;
 
     @OnClick(R.id.date)
     public void onClickDate() {
@@ -58,16 +69,19 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
 
     @OnClick(R.id.finish_button)
     public void onClickFinishBtn() {
-        Log.e("TAG", "onClickFinishBtn: ");
+        String titleOfTask = title.getText().toString();
+        String descriptionOfTask = description.getText().toString();
+        boolean hasDoneOfTask = hasDone.isChecked();
+        boolean isRemindedOfTask = isReminded.isChecked();
+        String dateOfTask = date.getText().toString();
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.putExtra("task", new Task(titleOfTask, descriptionOfTask, hasDoneOfTask, isRemindedOfTask, dateOfTask));
+        startActivity(intent);
     }
 
     @OnTextChanged(value = R.id.title_input, callback = OnTextChanged.Callback.TEXT_CHANGED)
     void onTextChanged() {
-        if (title.getText().toString().length() > 0) {
-            isTitleSet = true;
-        } else {
-            isTitleSet = false;
-        }
+        isTitleSet = title.getText().toString().length() > 0;
         updateFinishBtn();
     }
 

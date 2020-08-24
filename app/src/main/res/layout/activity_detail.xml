@@ -46,7 +46,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <CheckBox
-        android:id="@+id/checkbox"
+        android:id="@+id/has_done_check"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checked="false"
@@ -63,10 +63,10 @@
         android:gravity="center"
         android:textColor="@color/colorOfCheckBox"
         android:textStyle="bold"
-        app:layout_constraintBaseline_toBaselineOf="@id/checkbox"
+        app:layout_constraintBaseline_toBaselineOf="@id/has_done_check"
         app:layout_constraintBottom_toBottomOf="@id/nav_bar_bottom"
         app:layout_constraintEnd_toStartOf="@id/remind_text"
-        app:layout_constraintStart_toEndOf="@id/checkbox"
+        app:layout_constraintStart_toEndOf="@id/has_done_check"
         tools:text="2020年8月21日" />
 
     <TextView
@@ -75,7 +75,7 @@
         android:layout_height="wrap_content"
         android:text="提醒"
         android:textColor="@color/black"
-        app:layout_constraintBaseline_toBaselineOf="@id/checkbox"
+        app:layout_constraintBaseline_toBaselineOf="@id/has_done_check"
         app:layout_constraintBottom_toBottomOf="@id/nav_bar_bottom"
         app:layout_constraintEnd_toStartOf="@id/remind_switch"
         app:layout_constraintStart_toEndOf="@id/date" />
@@ -85,7 +85,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checked="false"
-        app:layout_constraintBaseline_toBaselineOf="@id/checkbox"
+        app:layout_constraintBaseline_toBaselineOf="@id/has_done_check"
         app:layout_constraintEnd_toEndOf="@id/detail_margin_right_line" />
 
     <EditText

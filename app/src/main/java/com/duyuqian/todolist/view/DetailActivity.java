@@ -3,24 +3,27 @@ package com.duyuqian.todolist.view;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.duyuqian.todolist.R;
 import com.duyuqian.todolist.model.task.Task;
+import com.duyuqian.todolist.others.TodoListConstant;
+import com.duyuqian.todolist.viewmodel.TaskViewModel;
 
 import java.util.Calendar;
+import java.util.Locale;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -39,20 +42,26 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
     CheckBox hasDone;
     @BindView(R.id.remind_switch)
     SwitchCompat isReminded;
+    @BindString(R.string.date_format)
+    String dateFormatter;
+    @BindString(R.string.choose_yes)
+    String chooseYes;
+    @BindString(R.string.choose_no)
+    String chooseNo;
 
     @OnClick(R.id.date)
     public void onClickDate() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(chooseYes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String dateStr = String.format("%d年%d月%d日", year, month + 1, day);
+                String dateStr = String.format(Locale.getDefault(), dateFormatter, year, month + 1, day);
                 date.setText(dateStr);
                 isDeadlineSet = true;
                 dialog.dismiss();
             }
         });
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(chooseNo, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -69,13 +78,16 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
 
     @OnClick(R.id.finish_button)
     public void onClickFinishBtn() {
-        String titleOfTask = title.getText().toString();
-        String descriptionOfTask = description.getText().toString();
-        boolean hasDoneOfTask = hasDone.isChecked();
-        boolean isRemindedOfTask = isReminded.isChecked();
-        String dateOfTask = date.getText().toString();
         Intent intent = new Intent(this, HomeActivity.class);
-        intent.putExtra("task", new Task(titleOfTask, descriptionOfTask, hasDoneOfTask, isRemindedOfTask, dateOfTask));
+        Task newTask = new Task(title.getText().toString(), description.getText().toString(),
+                hasDone.isChecked(), isReminded.isChecked(), date.getText().toString());
+        intent.putExtra("task", newTask);
+        new Thread() {
+            @Override
+            public void run() {
+                taskViewModel.insertTask(newTask);
+            }
+        }.start();
         startActivity(intent);
     }
 
@@ -88,6 +100,7 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
     private int year, month, day;
     boolean isDeadlineSet = false;
     boolean isTitleSet = false;
+    private TaskViewModel taskViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +108,15 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
         updateDate();
+
+        TaskViewModel.TaskViewModelFactory factory = new TaskViewModel.TaskViewModelFactory();
+        ViewModelProvider viewModelProvider = new ViewModelProvider(this, factory);
+        new Thread() {
+            @Override
+            public void run() {
+                taskViewModel = viewModelProvider.get(TaskViewModel.class);
+            }
+        }.start();
     }
 
 
@@ -119,7 +141,7 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH) + 1;
         day = calendar.get(Calendar.DAY_OF_MONTH);
-        String dateStr = String.format("%d年%d月%d日", year, month, day);
+        String dateStr = String.format(Locale.getDefault(), dateFormatter, year, month, day);
         date.setText(dateStr);
     }
 

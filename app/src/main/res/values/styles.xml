@@ -1,9 +1,15 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <item name="colorPrimary">@color/light_gray</item>
-        <item name="colorPrimaryDark">@color/light_gray</item>
+        <item name="colorPrimary">@color/nav_bar_color</item>
+        <item name="colorPrimaryDark">@color/nav_bar_color</item>
         <item name="colorAccent">@color/colorOfLoginBtn</item>
+        <item name="actionBarStyle">@style/MyActionBar</item>
+
+    </style>
+
+    <style name="MyActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="background">@color/nav_bar_color</item>
     </style>
 
     <style name="MyCheckBox" parent="Theme.AppCompat.Light">

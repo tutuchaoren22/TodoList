@@ -6,8 +6,9 @@
     <color name="white">#ffffff</color>
     <color name="black">#444444</color>
     <color name="gray">#f5f5f5</color>
-    <color name="light_gray">#fcfcfc</color>
-
+    <color name="remind_color">#e4e2e2</color>
+    <color name="nav_bar_color">#fffcfc</color>
     <color name="colorOfLoginBtn">#5ba5ef</color>
     <color name="colorOfCheckBox">#5ba5ef</color>
+    <color name="date_color">#afd3f4</color>
 </resources>

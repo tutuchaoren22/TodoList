@@ -1,5 +1,6 @@
 package com.duyuqian.todolist.view;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -88,7 +90,6 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             setContentView(R.layout.activity_login);
             ButterKnife.bind(this);
-
             LoginViewModel.LoginViewModelFactory factory = new LoginViewModel.LoginViewModelFactory();
             ViewModelProvider viewModelProvider = new ViewModelProvider(this, factory);
             new Thread() {
@@ -98,6 +99,19 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }.start();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null){
+            actionBar.hide();
+        }
+
     }
 
     public void updateLoginBtnStyle() {

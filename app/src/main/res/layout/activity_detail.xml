@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.DetailActivity">
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/detail_margin_left_line"
         android:layout_width="wrap_content"
@@ -20,12 +21,57 @@
         app:layout_constraintGuide_percent="@dimen/vertical_bias_0.95" />
 
     <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/nav_bar_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="@dimen/horizontal_bias_1" />
+
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/finish_btn_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="@dimen/horizontal_bias_0.85" />
 
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/nav_bar_bottom"
+        app:layout_constraintEnd_toStartOf="@id/date"
+        app:layout_constraintStart_toStartOf="@id/detail_margin_left_line"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="2020年8月21日"
+        android:textColor="#b2d5f5"
+        android:textStyle="bold"
+        app:layout_constraintBaseline_toBaselineOf="@id/checkbox"
+        app:layout_constraintEnd_toStartOf="@id/remind_text"
+        app:layout_constraintStart_toEndOf="@id/checkbox"
+        app:layout_constraintBottom_toBottomOf="@id/nav_bar_bottom"/>
+
+    <TextView
+        android:id="@+id/remind_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="提醒"
+        android:textColor="#444444"
+        app:layout_constraintBaseline_toBaselineOf="@id/checkbox"
+        app:layout_constraintEnd_toStartOf="@id/remind_switch"
+        app:layout_constraintStart_toEndOf="@id/date"
+        app:layout_constraintBottom_toBottomOf="@id/nav_bar_bottom"/>
+
+    <Switch
+        android:id="@+id/remind_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBaseline_toBaselineOf="@id/checkbox"
+        app:layout_constraintEnd_toEndOf="@id/detail_margin_right_line" />
     <Button
         android:id="@+id/finish_button"
         android:layout_width="@dimen/add_button_size"

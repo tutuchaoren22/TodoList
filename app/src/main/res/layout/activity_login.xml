@@ -97,6 +97,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/login_button_not_allow_background"
+        android:enabled="false"
         android:paddingVertical="@dimen/login_button_padding_vertical"
         android:text="@string/login"
         android:textSize="@dimen/login_button_text_size"

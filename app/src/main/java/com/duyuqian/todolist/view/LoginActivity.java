@@ -86,11 +86,11 @@ public class LoginActivity extends AppCompatActivity {
         if (getLoginStatus()) {
             skipToHomePage();
         } else {
-            LoginViewModel.LoginViewModelFactory factory = new LoginViewModel.LoginViewModelFactory();
-            ViewModelProvider viewModelProvider = new ViewModelProvider(this, factory);
-
             setContentView(R.layout.activity_login);
             ButterKnife.bind(this);
+
+            LoginViewModel.LoginViewModelFactory factory = new LoginViewModel.LoginViewModelFactory();
+            ViewModelProvider viewModelProvider = new ViewModelProvider(this, factory);
             new Thread() {
                 @Override
                 public void run() {
@@ -104,9 +104,11 @@ public class LoginActivity extends AppCompatActivity {
         if (isLegalOfUserName && isLegalOfPassWord) {
             loginBtn.setBackground(legalLoginBg);
             loginBtn.setTextColor(white);
+            loginBtn.setEnabled(true);
         } else {
             loginBtn.setBackground(illegalLoginBg);
             loginBtn.setTextColor(black);
+            loginBtn.setEnabled(false);
         }
     }
 

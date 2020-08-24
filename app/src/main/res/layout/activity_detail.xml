@@ -61,13 +61,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="2020年8月21日"
         android:textColor="@color/colorOfCheckBox"
         android:textStyle="bold"
         app:layout_constraintBaseline_toBaselineOf="@id/checkbox"
         app:layout_constraintBottom_toBottomOf="@id/nav_bar_bottom"
         app:layout_constraintEnd_toStartOf="@id/remind_text"
-        app:layout_constraintStart_toEndOf="@id/checkbox" />
+        app:layout_constraintStart_toEndOf="@id/checkbox"
+        tools:text="2020年8月21日" />
 
     <TextView
         android:id="@+id/remind_text"

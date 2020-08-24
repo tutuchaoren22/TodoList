@@ -6,4 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".view.HomeActivity">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/home_margin_left_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="@dimen/vertical_bias_0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/home_margin_right_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="@dimen/vertical_bias_0.95" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/add_btn_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="@dimen/horizontal_bias_0.85" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/add_btn_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="@dimen/vertical_bias_0.8" />
+
+    <Button
+        android:id="@+id/add_button"
+        android:layout_width="@dimen/add_button_size"
+        android:layout_height="@dimen/add_button_size"
+        android:background="@drawable/add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/home_margin_right_line"
+        app:layout_constraintTop_toTopOf="@id/add_btn_top" />
 </androidx.constraintlayout.widget.ConstraintLayout>

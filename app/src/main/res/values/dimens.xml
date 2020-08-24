@@ -5,6 +5,8 @@
     <dimen name="login_button_text_size">20sp</dimen>
     <dimen name="login_button_padding_vertical">15dp</dimen>
     <dimen name="login_button_radius">10dp</dimen>
+    <dimen name="add_button_size">70dp</dimen>
+
     <dimen name="vertical_bias_1">0.1</dimen>
     <dimen name="vertical_bias_9">0.9</dimen>
     <dimen name="horizontal_bias_1">0.1</dimen>
@@ -12,4 +14,8 @@
     <dimen name="horizontal_bias_4">0.4</dimen>
     <dimen name="horizontal_bias_5">0.5</dimen>
     <dimen name="horizontal_bias_7">0.7</dimen>
+    <dimen name="vertical_bias_0.05">0.05</dimen>
+    <dimen name="horizontal_bias_0.85">0.85</dimen>
+    <dimen name="vertical_bias_0.8">0.8</dimen>
+    <dimen name="vertical_bias_0.95">0.95</dimen>
 </resources>

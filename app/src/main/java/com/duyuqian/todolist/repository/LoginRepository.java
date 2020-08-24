@@ -1,10 +1,8 @@
 package com.duyuqian.todolist.repository;
 
-import android.util.Log;
-
 import com.duyuqian.todolist.MyApplication;
 import com.duyuqian.todolist.model.LocalDataSource;
-import com.duyuqian.todolist.model.User;
+import com.duyuqian.todolist.model.user.User;
 import com.duyuqian.todolist.others.TodoListConstant;
 import com.google.gson.Gson;
 

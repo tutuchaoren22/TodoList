@@ -6,6 +6,8 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import com.duyuqian.todolist.model.user.User;
+import com.duyuqian.todolist.model.user.UserDao;
 import com.duyuqian.todolist.others.TodoListConstant;
 
 @Database(entities = {User.class}, version = 1,exportSchema = false)

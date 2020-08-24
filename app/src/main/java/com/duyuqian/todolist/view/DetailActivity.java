@@ -62,9 +62,11 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
     }
 
     @OnTextChanged(value = R.id.title_input, callback = OnTextChanged.Callback.TEXT_CHANGED)
-    void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (count > 0) {
+    void onTextChanged() {
+        if (title.getText().toString().length() > 0) {
             isTitleSet = true;
+        } else {
+            isTitleSet = false;
         }
         updateFinishBtn();
     }

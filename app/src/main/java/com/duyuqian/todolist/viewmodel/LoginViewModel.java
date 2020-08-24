@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.duyuqian.todolist.model.User;
+import com.duyuqian.todolist.model.user.User;
 import com.duyuqian.todolist.others.MD5Utils;
 import com.duyuqian.todolist.repository.LoginRepository;
 

@@ -1,4 +1,4 @@
-package com.duyuqian.todolist.model;
+package com.duyuqian.todolist.model.user;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

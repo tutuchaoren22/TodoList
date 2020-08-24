@@ -1,6 +1,5 @@
-package com.duyuqian.todolist.model;
+package com.duyuqian.todolist.model.user;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;

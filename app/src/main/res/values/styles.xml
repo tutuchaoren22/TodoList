@@ -1,8 +1,13 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <item name="colorPrimary">#fcfcfc</item>
-        <item name="colorPrimaryDark">#fcfcfc</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/light_gray</item>
+        <item name="colorPrimaryDark">@color/light_gray</item>
+        <item name="colorAccent">@color/colorOfLoginBtn</item>
+    </style>
+
+    <style name="MyCheckBox" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/colorOfCheckBox</item>
+        <item name="colorControlActivated">@color/colorOfCheckBox</item>
     </style>
 </resources>

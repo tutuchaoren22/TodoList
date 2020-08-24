@@ -1,21 +1,16 @@
 package com.duyuqian.todolist.viewmodel;
 
-
-import android.content.SharedPreferences;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.duyuqian.todolist.R;
 import com.duyuqian.todolist.model.User;
 import com.duyuqian.todolist.others.MD5Utils;
 import com.duyuqian.todolist.repository.LoginRepository;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -23,9 +18,11 @@ import java.util.regex.Pattern;
 public class LoginViewModel extends ViewModel {
 
     private List<User> userList;
+    private LoginRepository loginRepository;
 
     public LoginViewModel(LoginRepository repository) {
-        userList = repository.getUserList();
+        this.loginRepository = repository;
+        userList = loginRepository.getUserList();
     }
 
     public List<User> getUserList() {

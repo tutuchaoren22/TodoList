@@ -1,5 +1,7 @@
 package com.duyuqian.todolist.repository;
 
+import android.util.Log;
+
 import com.duyuqian.todolist.MyApplication;
 import com.duyuqian.todolist.model.LocalDataSource;
 import com.duyuqian.todolist.model.User;
@@ -22,9 +24,6 @@ public class LoginRepository {
     private OkHttpClient okHttpClient = new OkHttpClient();
     private Gson gson = new Gson();
     private LocalDataSource dataBase = LocalDataSource.getInstance(MyApplication.getInstance());
-
-    public LoginRepository() {
-    }
 
     public List<User> getUserList() {
         List<User> userList = getUserListFromDataBase();

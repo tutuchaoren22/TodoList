@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 
@@ -95,5 +96,11 @@ public class HomeActivity extends AppCompatActivity {
         titleOfWeekDay.setText(new SimpleDateFormat("EEEE , d", Locale.ENGLISH).format(today) + "th");
         titleOfMonth.setText(new SimpleDateFormat("MMMM", Locale.ENGLISH).format(today));
         titleOfCount.setText(taskList.size() + "个任务");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
     }
 }

@@ -30,6 +30,7 @@
         android:id="@+id/item_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textSize="18sp"
         app:layout_constraintBaseline_toBaselineOf="@id/item_checkbox"
         app:layout_constraintEnd_toEndOf="@id/home_title_right"
         app:layout_constraintStart_toEndOf="@id/home_checkbox_right"

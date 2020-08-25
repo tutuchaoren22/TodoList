@@ -52,35 +52,37 @@
         android:checked="false"
         android:theme="@style/MyCheckBox"
         app:layout_constraintBottom_toBottomOf="@id/nav_bar_bottom"
-        app:layout_constraintEnd_toStartOf="@id/date"
+        app:layout_constraintEnd_toStartOf="@id/remind_text"
         app:layout_constraintStart_toStartOf="@id/detail_margin_left_line"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/date"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textColor="@color/colorOfCheckBox"
-        android:textSize="@dimen/text_size_date"
+        android:gravity="center_horizontal"
+        android:text="@string/default_date"
+        android:textColor="@color/remind_color"
+        android:textSize="@dimen/login_button_text_size"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/nav_bar_bottom"
-        app:layout_constraintEnd_toStartOf="@id/remind_text"
-        app:layout_constraintStart_toEndOf="@id/has_done_check"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/defalut_date" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="@dimen/horizontal_bias_5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/remind_text"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/text_margin"
+        android:gravity="end"
         android:text="@string/remind"
         android:textColor="@color/remind_color"
         android:textSize="@dimen/text_size_date"
         app:layout_constraintBottom_toBottomOf="@id/nav_bar_bottom"
         app:layout_constraintEnd_toStartOf="@id/remind_switch"
-        app:layout_constraintStart_toEndOf="@id/date"
+        app:layout_constraintStart_toEndOf="@id/has_done_check"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.SwitchCompat

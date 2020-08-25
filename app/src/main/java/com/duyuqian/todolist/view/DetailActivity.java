@@ -17,12 +17,12 @@ import android.widget.TextView;
 
 import com.duyuqian.todolist.R;
 import com.duyuqian.todolist.model.task.Task;
-import com.duyuqian.todolist.others.TodoListConstant;
 import com.duyuqian.todolist.viewmodel.TaskViewModel;
 
 import java.util.Calendar;
 import java.util.Locale;
 
+import butterknife.BindColor;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,6 +48,8 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
     String chooseYes;
     @BindString(R.string.choose_no)
     String chooseNo;
+    @BindColor(R.color.colorOfCheckBox)
+    int selectDateColor;
 
     @OnClick(R.id.date)
     public void onClickDate() {
@@ -57,8 +59,10 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
             public void onClick(DialogInterface dialog, int which) {
                 String dateStr = String.format(Locale.getDefault(), dateFormatter, year, month + 1, day);
                 date.setText(dateStr);
+                date.setTextColor(selectDateColor);
                 isDeadlineSet = true;
                 dialog.dismiss();
+                updateFinishBtn();
             }
         });
         builder.setNegativeButton(chooseNo, new DialogInterface.OnClickListener() {
@@ -73,7 +77,6 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
         dialog.setView(dialogView);
         dialog.show();
         datePicker.init(year, month, day, this);
-        updateFinishBtn();
     }
 
     @OnClick(R.id.finish_button)
@@ -107,8 +110,7 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
-        updateDate();
-
+        initDate();
         TaskViewModel.TaskViewModelFactory factory = new TaskViewModel.TaskViewModelFactory();
         ViewModelProvider viewModelProvider = new ViewModelProvider(this, factory);
         new Thread() {
@@ -136,20 +138,18 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
         this.day = dayOfMonth;
     }
 
-    private void updateDate() {
-        Calendar calendar = Calendar.getInstance();
-        year = calendar.get(Calendar.YEAR);
-        month = calendar.get(Calendar.MONTH) + 1;
-        day = calendar.get(Calendar.DAY_OF_MONTH);
-        String dateStr = String.format(Locale.getDefault(), dateFormatter, year, month, day);
-        date.setText(dateStr);
-    }
-
     private void updateFinishBtn() {
         if (isDeadlineSet && isTitleSet) {
             finishBtn.setEnabled(true);
         } else {
             finishBtn.setEnabled(false);
         }
+    }
+
+    private void initDate() {
+        Calendar calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH) + 1;
+        day = calendar.get(Calendar.DAY_OF_MONTH);
     }
 }

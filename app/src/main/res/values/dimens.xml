@@ -17,8 +17,10 @@
     <dimen name="horizontal_bias_1">0.1</dimen>
     <dimen name="horizontal_bias_3">0.3</dimen>
     <dimen name="horizontal_bias_4">0.4</dimen>
+    <dimen name="horizontal_bias_0.55">0.55</dimen>
     <dimen name="horizontal_bias_5">0.5</dimen>
     <dimen name="horizontal_bias_7">0.7</dimen>
+    <dimen name="horizontal_bias_0.75">0.75</dimen>
     <dimen name="vertical_bias_0.05">0.05</dimen>
     <dimen name="horizontal_bias_0.85">0.85</dimen>
     <dimen name="vertical_bias_0.8">0.8</dimen>

@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.duyuqian.todolist.R;
 import com.duyuqian.todolist.model.task.Task;
+import com.duyuqian.todolist.others.TodoListConstant;
 import com.duyuqian.todolist.viewmodel.TaskViewModel;
 
 import java.sql.Date;
@@ -36,6 +37,8 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
     TextView date;
     @BindView(R.id.title_input)
     EditText title;
+    @BindView(R.id.delete_button)
+    ImageButton deleteBtn;
     @BindView(R.id.finish_button)
     ImageButton finishBtn;
     @BindView(R.id.description_input)
@@ -52,6 +55,7 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
     String chooseNo;
     @BindColor(R.color.colorOfCheckBox)
     int selectDateColor;
+
 
     @OnClick(R.id.date)
     public void onClickDate() {
@@ -85,7 +89,7 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
     public void onClickFinishBtn() {
         Intent intent = new Intent(this, HomeActivity.class);
         Task newTask = new Task(title.getText().toString(), description.getText().toString(),
-                hasDone.isChecked(), isReminded.isChecked(), new Date(year-1900, month, day));
+                hasDone.isChecked(), isReminded.isChecked(), new Date(year - 1900, month, day));
         intent.putExtra("task", newTask);
         new Thread() {
             @Override
@@ -94,6 +98,7 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
             }
         }.start();
         startActivity(intent);
+        finish();
     }
 
     @OnTextChanged(value = R.id.title_input, callback = OnTextChanged.Callback.TEXT_CHANGED)
@@ -112,7 +117,6 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
-        initDate();
         TaskViewModel.TaskViewModelFactory factory = new TaskViewModel.TaskViewModelFactory();
         ViewModelProvider viewModelProvider = new ViewModelProvider(this, factory);
         new Thread() {
@@ -121,6 +125,15 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
                 taskViewModel = viewModelProvider.get(TaskViewModel.class);
             }
         }.start();
+
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            Task taskToEdit = (Task) intent.getSerializableExtra(TodoListConstant.EDIT_TASK_INFO);
+            createEditPage(taskToEdit);
+        } else {
+            initDate();
+        }
     }
 
 
@@ -153,5 +166,19 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH) + 1;
         day = calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
+    private void createEditPage(Task task) {
+        deleteBtn.setVisibility(View.VISIBLE);
+        isDeadlineSet = true;
+        isTitleSet = true;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(task.getDateOfRemind());
+        date.setText(String.format(Locale.getDefault(), dateFormatter,
+                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)));
+        date.setTextColor(selectDateColor);
+
+        title.setText(task.getTitle());
+        description.setText(task.getDescription());
     }
 }

@@ -1,11 +1,13 @@
 package com.duyuqian.todolist.view;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -70,6 +72,7 @@ public class HomeActivity extends AppCompatActivity implements TaskAdapter.ItemC
         TaskViewModel.TaskViewModelFactory factory = new TaskViewModel.TaskViewModelFactory();
         ViewModelProvider viewModelProvider = new ViewModelProvider(this, factory);
         new Thread() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void run() {
                 taskViewModel = viewModelProvider.get(TaskViewModel.class);
@@ -103,8 +106,10 @@ public class HomeActivity extends AppCompatActivity implements TaskAdapter.ItemC
         titleOfCount.setText(String.valueOf(taskList.size()).concat(patternOfCounts));
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void sortTaskList() {
-        Collections.sort(taskList, new Comparator<Task>() {
+        Comparator<Task> byHasDone = Comparator.comparing(Task::isHasDone);
+        Comparator<Task> byDateOfRemind = new Comparator<Task>() {
             @Override
             public int compare(Task task1, Task task2) {
                 if (task1.getDateOfRemind().before(task2.getDateOfRemind())) {
@@ -115,7 +120,8 @@ public class HomeActivity extends AppCompatActivity implements TaskAdapter.ItemC
                     return SORT_WITH_EQUAL;
                 }
             }
-        });
+        };
+        taskList.sort(byHasDone.thenComparing(byDateOfRemind));
     }
 
     @Override
@@ -124,6 +130,7 @@ public class HomeActivity extends AppCompatActivity implements TaskAdapter.ItemC
         return true;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onItemCheckboxClick(int position) {
         Task taskToUpdate = taskList.get(position);
@@ -136,6 +143,7 @@ public class HomeActivity extends AppCompatActivity implements TaskAdapter.ItemC
         }).start();
 
         adapter.notifyDataSetChanged();
+        sortTaskList();
         Toast.makeText(HomeActivity.this, "点击成功！", Toast.LENGTH_SHORT).show();
     }
 }

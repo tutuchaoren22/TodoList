@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -60,23 +59,15 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
     @OnClick(R.id.date)
     public void onClickDate() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setPositiveButton(chooseYes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String dateStr = String.format(Locale.getDefault(), dateFormatter, year, month + 1, day);
-                date.setText(dateStr);
-                date.setTextColor(selectDateColor);
-                isDeadlineSet = true;
-                dialog.dismiss();
-                updateFinishBtn();
-            }
+        builder.setPositiveButton(chooseYes, (dialog, which) -> {
+            String dateStr = String.format(Locale.getDefault(), dateFormatter, year, month + 1, day);
+            date.setText(dateStr);
+            date.setTextColor(selectDateColor);
+            isDeadlineSet = true;
+            dialog.dismiss();
+            updateFinishBtn();
         });
-        builder.setNegativeButton(chooseNo, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+        builder.setNegativeButton(chooseNo, (dialog, which) -> dialog.dismiss());
         final AlertDialog dialog = builder.create();
         View dialogView = View.inflate(this, R.layout.dialog_date, null);
         final DatePicker datePicker = dialogView.findViewById(R.id.date_picker);
@@ -90,11 +81,11 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
         Intent intent = new Intent(this, HomeActivity.class);
         Task newTask = new Task(title.getText().toString(), description.getText().toString(),
                 hasDone.isChecked(), isReminded.isChecked(), new Date(year - 1900, month, day));
-        intent.putExtra("task", newTask);
         new Thread() {
             @Override
             public void run() {
                 taskViewModel.insertTask(newTask);
+                //也可能是update
             }
         }.start();
         startActivity(intent);
@@ -126,13 +117,13 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
             }
         }.start();
 
-
         Intent intent = getIntent();
-        if (intent != null) {
-            Task taskToEdit = (Task) intent.getSerializableExtra(TodoListConstant.EDIT_TASK_INFO);
+        Task taskToEdit = (Task) intent.getSerializableExtra(TodoListConstant.EDIT_TASK_INFO);
+        if (taskToEdit != null) {
             createEditPage(taskToEdit);
         } else {
             initDate();
+            updateFinishBtn();
         }
     }
 
@@ -172,10 +163,12 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
         deleteBtn.setVisibility(View.VISIBLE);
         isDeadlineSet = true;
         isTitleSet = true;
+//        updateFinishBtn();
+        //update database
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(task.getDateOfRemind());
         date.setText(String.format(Locale.getDefault(), dateFormatter,
-                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)));
+                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH)));
         date.setTextColor(selectDateColor);
 
         title.setText(task.getTitle());

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.duyuqian.todolist.R;
 import com.duyuqian.todolist.model.task.Task;
 import com.duyuqian.todolist.model.task.TaskAdapter;
+import com.duyuqian.todolist.others.TodoListConstant;
 import com.duyuqian.todolist.viewmodel.TaskViewModel;
 
 import java.text.SimpleDateFormat;
@@ -32,7 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class HomeActivity extends AppCompatActivity implements TaskAdapter.ItemCheckboxClickListener {
+public class HomeActivity extends AppCompatActivity implements TaskAdapter.ItemClickListener {
     @BindView(R.id.task_list)
     RecyclerView taskListView;
     @BindView(R.id.title_week_day)
@@ -145,5 +146,13 @@ public class HomeActivity extends AppCompatActivity implements TaskAdapter.ItemC
         adapter.notifyDataSetChanged();
         sortTaskList();
         Toast.makeText(HomeActivity.this, "点击成功！", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Task taskToEdit = taskList.get(position);
+        Intent intent = new Intent(HomeActivity.this, DetailActivity.class);
+        intent.putExtra(TodoListConstant.EDIT_TASK_INFO, taskToEdit);
+        startActivity(intent);
     }
 }

@@ -21,7 +21,7 @@ import java.util.Locale;
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     private List<Task> taskList;
     private Context mContext;
-    private ItemCheckboxClickListener mItemCheckboxClickListener;
+    private ItemClickListener mItemClickListener;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         CheckBox hasDone;
@@ -62,13 +62,19 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         }
         holder.date.setText(new SimpleDateFormat(mContext.getResources().getString(R.string.month_day_format), Locale.getDefault()).format(task.getDateOfRemind()));
 
-        holder.hasDone.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mItemCheckboxClickListener.onItemCheckboxClick(position);
+                switch (v.getId()) {
+                    case R.id.item_checkbox:
+                        mItemClickListener.onItemCheckboxClick(position);
+                        break;
+                    default:
+                        mItemClickListener.onItemClick(position);
+                        break;
+                }
             }
         });
-
     }
 
     @Override
@@ -76,11 +82,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         return taskList.size();
     }
 
-    public void setOnItemCheckboxClickListener(ItemCheckboxClickListener itemCheckboxClickListener) {
-        this.mItemCheckboxClickListener = itemCheckboxClickListener;
+    public void setOnItemCheckboxClickListener(ItemClickListener itemClickListener) {
+        this.mItemClickListener = itemClickListener;
     }
 
-    public interface ItemCheckboxClickListener {
+    public interface ItemClickListener {
         void onItemCheckboxClick(int position);
+
+        void onItemClick(int position);
     }
 }

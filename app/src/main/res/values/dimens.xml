@@ -11,6 +11,7 @@
     <dimen name="text_margin">10dp</dimen>
     <dimen name="title_text_height">100dp</dimen>
     <dimen name="vertical_bias_1">0.1</dimen>
+    <dimen name="vertical_bias_0.15">0.15</dimen>
     <dimen name="vertical_bias_9">0.9</dimen>
     <dimen name="horizontal_bias_1">0.1</dimen>
     <dimen name="horizontal_bias_3">0.3</dimen>

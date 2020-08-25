@@ -49,7 +49,6 @@
         android:id="@+id/title_week_day"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Thursday，23th"
         android:textColor="@color/colorOfCheckBox"
         android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="@id/title_date_bottom"
@@ -61,7 +60,6 @@
         android:id="@+id/title_month"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="July"
         android:textSize="18sp"
         android:paddingBottom="10dp"
         app:layout_constraintBottom_toBottomOf="@id/title_bar_bottom"
@@ -74,7 +72,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="end"
-        android:text="0个任务"
         app:layout_constraintBaseline_toBaselineOf="@id/title_month"
         app:layout_constraintEnd_toEndOf="@id/home_margin_right_line"
         app:layout_constraintStart_toEndOf="@id/title_month" />

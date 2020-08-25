@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.duyuqian.todolist.R;
 import com.duyuqian.todolist.model.task.Task;
@@ -17,7 +18,10 @@ import com.duyuqian.todolist.model.task.TaskAdapter;
 import com.duyuqian.todolist.others.MyDecoration;
 import com.duyuqian.todolist.viewmodel.TaskViewModel;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,6 +30,12 @@ import butterknife.OnClick;
 public class HomeActivity extends AppCompatActivity {
     @BindView(R.id.task_list)
     RecyclerView taskListView;
+    @BindView(R.id.title_week_day)
+    TextView titleOfWeekDay;
+    @BindView(R.id.title_month)
+    TextView titleOfMonth;
+    @BindView(R.id.title_count)
+    TextView titleOfCount;
 
     @OnClick(R.id.add_button)
     public void onClickAddButton() {
@@ -60,6 +70,7 @@ public class HomeActivity extends AppCompatActivity {
                 Log.e("TAG", "onCreate: " + taskViewModel);
                 //get the datalist in the database
                 taskList = taskViewModel.getTaskList();
+                updatePage();
                 Log.e("TAG", "onCreate: " + taskList.size());
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                 taskListView.setLayoutManager(layoutManager);
@@ -79,4 +90,10 @@ public class HomeActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
     }
 
+    private void updatePage() {
+        Date today = new Date();
+        titleOfWeekDay.setText(new SimpleDateFormat("EEEE , d", Locale.ENGLISH).format(today) + "th");
+        titleOfMonth.setText(new SimpleDateFormat("MMMM", Locale.ENGLISH).format(today));
+        titleOfCount.setText(taskList.size() + "个任务");
+    }
 }

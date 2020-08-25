@@ -2,7 +2,6 @@ package com.duyuqian.todolist.model.task;
 
 import android.content.Context;
 import android.graphics.Paint;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,19 +9,19 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.duyuqian.todolist.R;
 
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     private List<Task> taskList;
     private Context mContext;
+    private ItemCheckboxClickListener mItemCheckboxClickListener;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         CheckBox hasDone;
@@ -57,8 +56,19 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         if (task.isHasDone() == true) {
             holder.title.setTextColor(mContext.getResources().getColor(R.color.remind_color));
             holder.title.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+        } else {
+            holder.title.setTextColor(mContext.getResources().getColor(R.color.black));
+            holder.title.setPaintFlags(holder.title.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
         }
-        holder.date.setText(new SimpleDateFormat("MM月dd日").format(task.getDateOfRemind()));
+        holder.date.setText(new SimpleDateFormat(mContext.getResources().getString(R.string.month_day_format), Locale.getDefault()).format(task.getDateOfRemind()));
+
+        holder.hasDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mItemCheckboxClickListener.onItemCheckboxClick(position);
+            }
+        });
+
     }
 
     @Override
@@ -66,5 +76,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         return taskList.size();
     }
 
+    public void setOnItemCheckboxClickListener(ItemCheckboxClickListener itemCheckboxClickListener) {
+        this.mItemCheckboxClickListener = itemCheckboxClickListener;
+    }
 
+    public interface ItemCheckboxClickListener {
+        void onItemCheckboxClick(int position);
+    }
 }

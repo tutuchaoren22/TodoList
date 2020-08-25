@@ -3,6 +3,7 @@ package com.duyuqian.todolist.model.task;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -13,4 +14,7 @@ public interface TaskDao {
 
     @Insert
     void insertAll(Task... tasks);
+
+    @Update
+    void updateTask(Task... task);
 }

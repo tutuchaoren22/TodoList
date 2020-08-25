@@ -16,4 +16,8 @@ public class TaskRepository {
     public void insertTask(Task task) {
         dataBase.taskDao().insertAll(task);
     }
+
+    public void updateTaskList(Task task) {
+        dataBase.taskDao().updateTask(task);
+    }
 }

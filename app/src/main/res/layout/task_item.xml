@@ -32,7 +32,6 @@
         android:layout_height="wrap_content"
         android:checked="false"
         android:theme="@style/MyCheckBox"
-
         android:paddingVertical="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/home_checkbox_right"

@@ -15,21 +15,25 @@ public class TaskViewModel extends ViewModel {
 
     public TaskViewModel(TaskRepository repository) {
         this.taskRepository = repository;
-        updateTaskList();
+        initTaskList();
     }
 
     public List<Task> getTaskList() {
-        updateTaskList();
+        initTaskList();
         return taskList;
     }
 
     public void insertTask(Task task) {
         taskRepository.insertTask(task);
-        updateTaskList();
+        initTaskList();
     }
 
-    public void updateTaskList() {
+    public void initTaskList() {
         taskList = taskRepository.getAllTask();
+    }
+
+    public void updateTaskList(Task task) {
+        taskRepository.updateTaskList(task);
     }
 
     public static class TaskViewModelFactory extends ViewModelProvider.NewInstanceFactory {

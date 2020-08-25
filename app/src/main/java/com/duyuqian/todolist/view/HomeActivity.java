@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.duyuqian.todolist.R;
 import com.duyuqian.todolist.model.task.Task;
@@ -29,7 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements TaskAdapter.ItemCheckboxClickListener {
     @BindView(R.id.task_list)
     RecyclerView taskListView;
     @BindView(R.id.title_week_day)
@@ -58,6 +59,7 @@ public class HomeActivity extends AppCompatActivity {
     public static final int SORT_WITH_EQUAL = 0;
     private TaskViewModel taskViewModel;
     private List<Task> taskList;
+    private TaskAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +78,8 @@ public class HomeActivity extends AppCompatActivity {
                 sortTaskList();
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                 taskListView.setLayoutManager(layoutManager);
-                TaskAdapter adapter = new TaskAdapter(getApplicationContext(), taskList);
+                adapter = new TaskAdapter(getApplicationContext(), taskList);
+                adapter.setOnItemCheckboxClickListener(HomeActivity.this);
                 runOnUiThread(
                         () -> taskListView.setAdapter(adapter)
                 );
@@ -119,5 +122,20 @@ public class HomeActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    public void onItemCheckboxClick(int position) {
+        Task taskToUpdate = taskList.get(position);
+        taskToUpdate.setHasDone(!taskToUpdate.isHasDone());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                taskViewModel.updateTaskList(taskToUpdate);
+            }
+        }).start();
+
+        adapter.notifyDataSetChanged();
+        Toast.makeText(HomeActivity.this, "点击成功！", Toast.LENGTH_SHORT).show();
     }
 }

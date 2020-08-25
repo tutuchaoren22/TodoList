@@ -49,10 +49,9 @@
         android:id="@+id/title_week_day"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Thursday,23th"
+        android:text="Thursday，23th"
         android:textColor="@color/colorOfCheckBox"
-        android:textSize="30sp"
-        android:textStyle="bold"
+        android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="@id/title_date_bottom"
         app:layout_constraintEnd_toEndOf="@id/home_margin_right_line"
         app:layout_constraintStart_toStartOf="@id/home_margin_left_line"
@@ -63,7 +62,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="July"
-        android:textSize="20sp"
+        android:textSize="18sp"
+        android:paddingBottom="10dp"
         app:layout_constraintBottom_toBottomOf="@id/title_bar_bottom"
         app:layout_constraintEnd_toStartOf="@id/title_count"
         app:layout_constraintStart_toStartOf="@id/home_margin_left_line"
@@ -78,6 +78,15 @@
         app:layout_constraintBaseline_toBaselineOf="@id/title_month"
         app:layout_constraintEnd_toEndOf="@id/home_margin_right_line"
         app:layout_constraintStart_toEndOf="@id/title_month" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/task_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/home_margin_right_line"
+        app:layout_constraintStart_toStartOf="@id/home_margin_left_line"
+        app:layout_constraintTop_toTopOf="@id/title_bar_bottom" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/add_btn_top"

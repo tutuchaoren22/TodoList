@@ -1,6 +1,5 @@
 package com.duyuqian.todolist.view;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -21,8 +20,6 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private Task task;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +27,7 @@ public class HomeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        task = (Task) intent.getSerializableExtra("task");
+        Task task = (Task) intent.getSerializableExtra("task");
         if (task != null) {
             Toast.makeText(this, task.toString(), Toast.LENGTH_LONG).show();
         }
@@ -43,10 +40,6 @@ public class HomeActivity extends AppCompatActivity {
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.hide();
-        }
     }
 
 }

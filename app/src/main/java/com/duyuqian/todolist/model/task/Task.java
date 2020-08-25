@@ -6,6 +6,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 @Entity(tableName = "task")
 public class Task implements Serializable {
@@ -21,9 +22,9 @@ public class Task implements Serializable {
     @ColumnInfo(name = "is_reminded")
     private boolean isReminded;
     @ColumnInfo(name = "date_of_remind")
-    private String dateOfRemind;
+    private Date dateOfRemind;
 
-    public Task(String title, String description, boolean hasDone, boolean isReminded, String dateOfRemind) {
+    public Task(String title, String description, boolean hasDone, boolean isReminded, Date dateOfRemind) {
         this.title = title;
         this.description = description;
         this.hasDone = hasDone;
@@ -71,22 +72,11 @@ public class Task implements Serializable {
         isReminded = reminded;
     }
 
-    public String getDateOfRemind() {
+    public Date getDateOfRemind() {
         return dateOfRemind;
     }
 
-    public void setDateOfRemind(String dateOfRemind) {
+    public void setDateOfRemind(Date dateOfRemind) {
         this.dateOfRemind = dateOfRemind;
-    }
-
-    @Override
-    public String toString() {
-        return "Task{" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", hasDone=" + hasDone +
-                ", isReminded=" + isReminded +
-                ", dateOfRemind='" + dateOfRemind + '\'' +
-                '}';
     }
 }

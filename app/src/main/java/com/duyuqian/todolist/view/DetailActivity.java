@@ -13,12 +13,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.duyuqian.todolist.R;
 import com.duyuqian.todolist.model.task.Task;
 import com.duyuqian.todolist.viewmodel.TaskViewModel;
 
+import java.sql.Date;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -35,7 +37,7 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
     @BindView(R.id.title_input)
     EditText title;
     @BindView(R.id.finish_button)
-    Button finishBtn;
+    ImageButton finishBtn;
     @BindView(R.id.description_input)
     EditText description;
     @BindView(R.id.has_done_check)
@@ -83,7 +85,7 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
     public void onClickFinishBtn() {
         Intent intent = new Intent(this, HomeActivity.class);
         Task newTask = new Task(title.getText().toString(), description.getText().toString(),
-                hasDone.isChecked(), isReminded.isChecked(), date.getText().toString());
+                hasDone.isChecked(), isReminded.isChecked(), new Date(year-1900, month, day));
         intent.putExtra("task", newTask);
         new Thread() {
             @Override

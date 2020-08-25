@@ -121,14 +121,25 @@
         app:layout_constraintStart_toStartOf="@id/detail_margin_left_line"
         app:layout_constraintTop_toBottomOf="@id/title_input" />
 
-    <Button
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/finish_btn_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="@dimen/horizontal_bias_7" />
+
+    <ImageButton
         android:id="@+id/finish_button"
-        android:layout_width="@dimen/add_button_size"
-        android:layout_height="@dimen/add_button_size"
-        android:background="@drawable/check_selected"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
         android:enabled="false"
+        android:padding="@dimen/login_input_padding_vertical"
+        android:scaleType="centerInside"
+        android:src="@drawable/check_selected"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/detail_margin_right_line"
+        app:layout_constraintStart_toStartOf="@id/finish_btn_left"
         app:layout_constraintTop_toTopOf="@id/finish_btn_top" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

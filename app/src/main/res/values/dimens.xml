@@ -3,6 +3,7 @@
     <dimen name="login_input_bottom">2dp</dimen>
     <dimen name="login_input_padding_vertical">10dp</dimen>
     <dimen name="login_button_text_size">20sp</dimen>
+    <dimen name="title_week_day">22sp</dimen>
     <dimen name="title_text_size">30sp</dimen>
     <dimen name="text_size_date">18sp</dimen>
     <dimen name="login_button_padding_vertical">15dp</dimen>

@@ -2,7 +2,6 @@ package com.duyuqian.todolist.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,14 +15,16 @@ import android.widget.TextView;
 import com.duyuqian.todolist.R;
 import com.duyuqian.todolist.model.task.Task;
 import com.duyuqian.todolist.model.task.TaskAdapter;
-import com.duyuqian.todolist.others.MyDecoration;
 import com.duyuqian.todolist.viewmodel.TaskViewModel;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -37,6 +38,14 @@ public class HomeActivity extends AppCompatActivity {
     TextView titleOfMonth;
     @BindView(R.id.title_count)
     TextView titleOfCount;
+    @BindString(R.string.pattern_week)
+    String patternOfWeek;
+    @BindString(R.string.pattern_day)
+    String patternOfDay;
+    @BindString(R.string.pattern_month)
+    String patternOfMonth;
+    @BindString(R.string.tasks_count)
+    String patternOfCounts;
 
     @OnClick(R.id.add_button)
     public void onClickAddButton() {
@@ -44,6 +53,9 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public static final int SORT_WITH_INCREASE_ORDER = -1;
+    public static final int SORT_WITH_DESCENDING_ORDER = 1;
+    public static final int SORT_WITH_EQUAL = 0;
     private TaskViewModel taskViewModel;
     private List<Task> taskList;
 
@@ -53,31 +65,21 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 
-
-        //打印从编辑页面返回的信息
-//        Intent intent = getIntent();
-//        Task task = (Task) intent.getSerializableExtra("task");
-//        if (task != null) {
-//            Toast.makeText(this, task.toString(), Toast.LENGTH_LONG).show();
-//        }
-
-        //启动viewmodel
         TaskViewModel.TaskViewModelFactory factory = new TaskViewModel.TaskViewModelFactory();
         ViewModelProvider viewModelProvider = new ViewModelProvider(this, factory);
         new Thread() {
             @Override
             public void run() {
                 taskViewModel = viewModelProvider.get(TaskViewModel.class);
-                Log.e("TAG", "onCreate: " + taskViewModel);
-                //get the datalist in the database
                 taskList = taskViewModel.getTaskList();
                 updatePage();
-                Log.e("TAG", "onCreate: " + taskList.size());
+                sortTaskList();
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                 taskListView.setLayoutManager(layoutManager);
                 TaskAdapter adapter = new TaskAdapter(getApplicationContext(), taskList);
-                taskListView.setAdapter(adapter);
-                taskListView.addItemDecoration(new MyDecoration(getApplicationContext(), MyDecoration.VERTICAL_LIST));
+                runOnUiThread(
+                        () -> taskListView.setAdapter(adapter)
+                );
             }
         }.start();
 
@@ -93,9 +95,24 @@ public class HomeActivity extends AppCompatActivity {
 
     private void updatePage() {
         Date today = new Date();
-        titleOfWeekDay.setText(new SimpleDateFormat("EEEE , d", Locale.ENGLISH).format(today) + "th");
-        titleOfMonth.setText(new SimpleDateFormat("MMMM", Locale.ENGLISH).format(today));
-        titleOfCount.setText(taskList.size() + "个任务");
+        titleOfWeekDay.setText(new SimpleDateFormat(patternOfWeek, Locale.ENGLISH).format(today).concat(patternOfDay));
+        titleOfMonth.setText(new SimpleDateFormat(patternOfMonth, Locale.ENGLISH).format(today));
+        titleOfCount.setText(String.valueOf(taskList.size()).concat(patternOfCounts));
+    }
+
+    private void sortTaskList() {
+        Collections.sort(taskList, new Comparator<Task>() {
+            @Override
+            public int compare(Task task1, Task task2) {
+                if (task1.getDateOfRemind().before(task2.getDateOfRemind())) {
+                    return SORT_WITH_INCREASE_ORDER;
+                } else if (task1.getDateOfRemind().after(task2.getDateOfRemind())) {
+                    return SORT_WITH_DESCENDING_ORDER;
+                } else {
+                    return SORT_WITH_EQUAL;
+                }
+            }
+        });
     }
 
     @Override

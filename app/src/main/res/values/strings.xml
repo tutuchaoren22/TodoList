@@ -17,4 +17,10 @@
     <string name="remind">提醒</string>
     <string name="todo_list_title">制作TODO list</string>
     <string name="todo_list_description">描述....</string>
+    <string name="tasks_count">个任务</string>
+    <string name="pattern_week">EEEE , d</string>
+    <string name="pattern_day">th</string>
+    <string name="pattern_month">MMMM</string>
+
+
 </resources>

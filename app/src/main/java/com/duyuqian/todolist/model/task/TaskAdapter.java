@@ -1,5 +1,6 @@
 package com.duyuqian.todolist.model.task;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import java.util.List;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     private List<Task> taskList;
+    private Context mContext;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         CheckBox hasDone;
@@ -30,8 +32,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         }
     }
 
-    public TaskAdapter(List<Task> tasks) {
+    public TaskAdapter(Context context, List<Task> tasks) {
         taskList = tasks;
+        this.mContext = context;
     }
 
     @NonNull
@@ -46,7 +49,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         Task task = taskList.get(position);
         holder.hasDone.setChecked(task.isHasDone());
         holder.title.setText(task.getTitle());
-        holder.date.setText(task.getDateOfRemind());
+        holder.date.setText(task.getDateOfRemind().split("年")[1]);
     }
 
     @Override

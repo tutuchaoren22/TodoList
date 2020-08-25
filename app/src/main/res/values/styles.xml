@@ -5,6 +5,7 @@
         <item name="colorPrimaryDark">@color/nav_bar_color</item>
         <item name="colorAccent">@color/colorOfLoginBtn</item>
         <item name="actionBarStyle">@style/MyActionBar</item>
+        <item name="android:listDivider">@drawable/divider</item>
 
     </style>
 

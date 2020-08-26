@@ -17,13 +17,14 @@ import com.duyuqian.todolist.view.HomeActivity;
 import java.util.Calendar;
 
 public class MyNotification {
+    public static final int NOTIFY_ID = 1;
     private NotificationManagerCompat notificationManager;
 
     public MyNotification(Context context) {
         this.notificationManager = NotificationManagerCompat.from(context);
     }
 
-    public void sendNotification(Context context, int id, Calendar calendar, String title, String content) {
+    public void sendNotification(Context context) {
         if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel(TodoListConstant.CHANNEL_ID, TodoListConstant.CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
             notificationManager.createNotificationChannel(notificationChannel);
@@ -32,14 +33,14 @@ public class MyNotification {
         Intent intent = new Intent(context, HomeActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
         Notification notification = builder.setSmallIcon(R.drawable.ic_todo_list)
-                .setWhen(calendar.getTimeInMillis())
-                .setContentTitle(title)
-                .setContentText(content)
+                .setWhen(Calendar.getInstance().getTimeInMillis())
+                .setContentTitle(TodoListConstant.NOTIFICATION_TITLE)
+                .setContentText(TodoListConstant.NOTIFICATION_CONTENT)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
                 .build();
-        notificationManager.notify(id, notification);
+        notificationManager.notify(NOTIFY_ID, notification);
     }
 
     public void cancelAllNotification() {

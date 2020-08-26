@@ -6,10 +6,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import com.duyuqian.todolist.R;
 import com.duyuqian.todolist.model.task.Task;
 import com.duyuqian.todolist.model.task.TaskAdapter;
+import com.duyuqian.todolist.others.AlarmReceiver;
 import com.duyuqian.todolist.others.MyNotification;
 import com.duyuqian.todolist.others.TodoListConstant;
 import com.duyuqian.todolist.viewmodel.TaskViewModel;
@@ -50,8 +53,6 @@ public class HomeActivity extends AppCompatActivity {
     String patternOfMonth;
     @BindString(R.string.tasks_count)
     String patternOfCounts;
-    @BindString(R.string.notification_title)
-    String notificationTitle;
 
     @OnClick(R.id.add_button)
     public void onClickAddButton() {
@@ -159,12 +160,14 @@ public class HomeActivity extends AppCompatActivity {
         myNotification.cancelAllNotification();
         for (Task task : taskList) {
             if (!task.isHasDone() && task.isReminded() && task.getDateOfRemind().after(new Date())) {
-//                Calendar calendar = Calendar.getInstance();
-//                calendar.setTime(task.getDateOfRemind());
-//                calendar.add(Calendar.HOUR, 6);
                 Calendar calendar = Calendar.getInstance();
-                calendar.add(Calendar.SECOND, 5);
-                myNotification.sendNotification(this, task.getId(), calendar, notificationTitle, task.getTitle());
+                calendar.setTime(task.getDateOfRemind());
+                calendar.add(Calendar.HOUR_OF_DAY, TodoListConstant.ALARM_HOUR);
+                Intent intent = new Intent(this, AlarmReceiver.class);
+                intent.setAction(TodoListConstant.INTENT_NOTIFICATION_ACTION);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
             }
         }
     }

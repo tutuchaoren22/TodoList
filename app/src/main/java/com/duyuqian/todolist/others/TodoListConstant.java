@@ -10,4 +10,8 @@ public class TodoListConstant {
     public static final String CHANNEL_ID = "TO_DO_LIST_CHANNEL_ID";
     public static final String CHANNEL_NAME = "TO_DO_LIST_CHANNEL_NAME";
     public static final int CHANNEL_IMPORTANCE = NotificationManager.IMPORTANCE_LOW;
+    public static final String INTENT_NOTIFICATION_ACTION = "NOTIFICATION";
+    public static final int ALARM_HOUR = 6;
+    public static final String NOTIFICATION_TITLE = "TodoList";
+    public static final String NOTIFICATION_CONTENT = "您有一条未完成的待办事项";
 }

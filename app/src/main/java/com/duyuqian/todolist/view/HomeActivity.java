@@ -33,7 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class HomeActivity extends AppCompatActivity implements TaskAdapter.ItemClickListener {
+public class HomeActivity extends AppCompatActivity {
     @BindView(R.id.task_list)
     RecyclerView taskListView;
     @BindView(R.id.title_week_day)
@@ -83,7 +83,7 @@ public class HomeActivity extends AppCompatActivity implements TaskAdapter.ItemC
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                 taskListView.setLayoutManager(layoutManager);
                 adapter = new TaskAdapter(getApplicationContext(), taskList);
-                adapter.setOnItemCheckboxClickListener(HomeActivity.this);
+                adapter.setOnItemClickListener(MyItemClickListener);
                 runOnUiThread(
                         () -> taskListView.setAdapter(adapter)
                 );
@@ -110,16 +110,13 @@ public class HomeActivity extends AppCompatActivity implements TaskAdapter.ItemC
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void sortTaskList() {
         Comparator<Task> byHasDone = Comparator.comparing(Task::isHasDone);
-        Comparator<Task> byDateOfRemind = new Comparator<Task>() {
-            @Override
-            public int compare(Task task1, Task task2) {
-                if (task1.getDateOfRemind().before(task2.getDateOfRemind())) {
-                    return SORT_WITH_INCREASE_ORDER;
-                } else if (task1.getDateOfRemind().after(task2.getDateOfRemind())) {
-                    return SORT_WITH_DESCENDING_ORDER;
-                } else {
-                    return SORT_WITH_EQUAL;
-                }
+        Comparator<Task> byDateOfRemind = (task1, task2) -> {
+            if (task1.getDateOfRemind().before(task2.getDateOfRemind())) {
+                return SORT_WITH_INCREASE_ORDER;
+            } else if (task1.getDateOfRemind().after(task2.getDateOfRemind())) {
+                return SORT_WITH_DESCENDING_ORDER;
+            } else {
+                return SORT_WITH_EQUAL;
             }
         };
         taskList.sort(byHasDone.thenComparing(byDateOfRemind));
@@ -131,28 +128,65 @@ public class HomeActivity extends AppCompatActivity implements TaskAdapter.ItemC
         return true;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public void onItemCheckboxClick(int position) {
-        Task taskToUpdate = taskList.get(position);
-        taskToUpdate.setHasDone(!taskToUpdate.isHasDone());
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                taskViewModel.updateTaskList(taskToUpdate);
+//    @RequiresApi(api = Build.VERSION_CODES.N)
+//    @Override
+//    public void onItemCheckboxClick(int position) {
+//        //不可用 覆盖
+//        Log.e("TAG", "onItemCheckboxClick: ");
+////        Task taskToUpdate = taskList.get(position);
+////        taskToUpdate.setHasDone(!taskToUpdate.isHasDone());
+////        new Thread(new Runnable() {
+////            @Override
+////            public void run() {
+////                taskViewModel.updateTaskList(taskToUpdate);
+////            }
+////        }).start();
+////
+////        adapter.notifyDataSetChanged();
+////        sortTaskList();
+////        Toast.makeText(HomeActivity.this, "点击成功！", Toast.LENGTH_SHORT).show();
+//    }
+//
+//    @Override
+//    public void onItemClick(int position) {
+//        Log.e("TAG", "onItemClick: ");
+////        Task taskToEdit = taskList.get(position);
+////        Intent intent = new Intent(HomeActivity.this, DetailActivity.class);
+////        intent.putExtra(TodoListConstant.EDIT_TASK_INFO, taskToEdit);
+////        startActivity(intent);
+//    }
+
+    private TaskAdapter.OnItemClickListener MyItemClickListener = new TaskAdapter.OnItemClickListener() {
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        public void onItemClick(View view, int position) {
+            switch (view.getId()) {
+                case R.id.item_checkbox:
+                    Toast.makeText(HomeActivity.this, "click checkbox" + (position + 1), Toast.LENGTH_SHORT).show();
+                    Task taskToUpdate = taskList.get(position);
+                    taskToUpdate.setHasDone(!taskToUpdate.isHasDone());
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            taskViewModel.updateTaskList(taskToUpdate);
+                        }
+                    }).start();
+                    adapter.notifyDataSetChanged();
+                    sortTaskList();
+                    break;
+                default:
+                    Toast.makeText(HomeActivity.this, "click item" + (position + 1), Toast.LENGTH_SHORT).show();
+                    Task taskToEdit = taskList.get(position);
+                    Intent intent = new Intent(HomeActivity.this, DetailActivity.class);
+                    intent.putExtra(TodoListConstant.EDIT_TASK_INFO, taskToEdit);
+                    startActivity(intent);
+                    break;
             }
-        }).start();
+        }
 
-        adapter.notifyDataSetChanged();
-        sortTaskList();
-        Toast.makeText(HomeActivity.this, "点击成功！", Toast.LENGTH_SHORT).show();
-    }
+        @Override
+        public void onItemLongClick(View view) {
 
-    @Override
-    public void onItemClick(int position) {
-        Task taskToEdit = taskList.get(position);
-        Intent intent = new Intent(HomeActivity.this, DetailActivity.class);
-        intent.putExtra(TodoListConstant.EDIT_TASK_INFO, taskToEdit);
-        startActivity(intent);
-    }
+        }
+    };
 }

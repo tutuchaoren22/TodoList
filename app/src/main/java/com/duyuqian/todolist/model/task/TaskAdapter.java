@@ -2,6 +2,7 @@ package com.duyuqian.todolist.model.task;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,18 +22,27 @@ import java.util.Locale;
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     private List<Task> taskList;
     private Context mContext;
-    private ItemClickListener mItemClickListener;
+    public OnItemClickListener mOnItemClickListener;
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         CheckBox hasDone;
         TextView title;
         TextView date;
 
-        public ViewHolder(View view) {
-            super(view);
-            hasDone = view.findViewById(R.id.item_checkbox);
-            title = view.findViewById(R.id.item_title);
-            date = view.findViewById(R.id.item_date);
+        public ViewHolder(View itemView) {
+            super(itemView);
+            hasDone = itemView.findViewById(R.id.item_checkbox);
+            title = itemView.findViewById(R.id.item_title);
+            date = itemView.findViewById(R.id.item_date);
+            itemView.setOnClickListener(this);
+            hasDone.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (mOnItemClickListener != null) {
+                mOnItemClickListener.onItemClick(v, getAdapterPosition());
+            }
         }
     }
 
@@ -62,19 +72,21 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         }
         holder.date.setText(new SimpleDateFormat(mContext.getResources().getString(R.string.month_day_format), Locale.getDefault()).format(task.getDateOfRemind()));
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.item_checkbox:
-                        mItemClickListener.onItemCheckboxClick(position);
-                        break;
-                    default:
-                        mItemClickListener.onItemClick(position);
-                        break;
-                }
-            }
-        });
+//        holder.hasDone.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                switch (v.getId()) {
+//                    case R.id.item_checkbox:
+//                        Log.e("TAG", "onItemCheckboxClick: ");
+//                        mItemClickListener.onItemCheckboxClick(position);
+//                        break;
+//                    default:
+//                        Log.e("TAG", "onItemClick: ");
+//                        mItemClickListener.onItemClick(position);
+//                        break;
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -82,13 +94,16 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         return taskList.size();
     }
 
-    public void setOnItemCheckboxClickListener(ItemClickListener itemClickListener) {
-        this.mItemClickListener = itemClickListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+
+//        void onItemCheckboxClick(int position);
+
+        void onItemLongClick(View view);
     }
 
-    public interface ItemClickListener {
-        void onItemCheckboxClick(int position);
-
-        void onItemClick(int position);
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mOnItemClickListener = listener;
     }
 }

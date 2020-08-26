@@ -34,7 +34,7 @@ public class MyNotification {
         Notification notification = builder.setSmallIcon(R.drawable.ic_todo_list)
                 .setWhen(calendar.getTimeInMillis())
                 .setContentTitle(title)
-                .setContentText(title)
+                .setContentText(content)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
@@ -16,10 +17,12 @@ import android.widget.TextView;
 import com.duyuqian.todolist.R;
 import com.duyuqian.todolist.model.task.Task;
 import com.duyuqian.todolist.model.task.TaskAdapter;
+import com.duyuqian.todolist.others.MyNotification;
 import com.duyuqian.todolist.others.TodoListConstant;
 import com.duyuqian.todolist.viewmodel.TaskViewModel;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +50,8 @@ public class HomeActivity extends AppCompatActivity {
     String patternOfMonth;
     @BindString(R.string.tasks_count)
     String patternOfCounts;
+    @BindString(R.string.notification_title)
+    String notificationTitle;
 
     @OnClick(R.id.add_button)
     public void onClickAddButton() {
@@ -60,12 +65,14 @@ public class HomeActivity extends AppCompatActivity {
     private TaskViewModel taskViewModel;
     private List<Task> taskList;
     private TaskAdapter adapter;
+    private MyNotification myNotification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+        myNotification = new MyNotification(this);
 
         TaskViewModel.TaskViewModelFactory factory = new TaskViewModel.TaskViewModelFactory();
         ViewModelProvider viewModelProvider = new ViewModelProvider(this, factory);
@@ -82,10 +89,14 @@ public class HomeActivity extends AppCompatActivity {
                 adapter = new TaskAdapter(getApplicationContext(), taskList);
                 adapter.setOnItemClickListener(MyItemClickListener);
                 runOnUiThread(
-                        () -> taskListView.setAdapter(adapter)
+                        () -> {
+                            taskListView.setAdapter(adapter);
+                            updateNotification();
+                        }
                 );
             }
         }.start();
+
 
     }
 
@@ -143,4 +154,20 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
     };
+
+    private void updateNotification() {
+        for (Task task : taskList) {
+            if (!task.isHasDone() && task.isReminded() && task.getDateOfRemind().after(new Date())) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(task.getDateOfRemind());
+                calendar.add(Calendar.HOUR, 6);
+//                Calendar calendar = Calendar.getInstance();
+//                calendar.add(Calendar.SECOND, 5);
+                myNotification.sendNotification(this, task.getId(), calendar, notificationTitle, task.getTitle());
+            } else {
+                myNotification.cancelNotification(task.getId());
+            }
+        }
+
+    }
 }

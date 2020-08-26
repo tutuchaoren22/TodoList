@@ -22,8 +22,7 @@
     <string name="pattern_week">EEEE , d</string>
     <string name="pattern_day">th</string>
     <string name="pattern_month">MMMM</string>
-    <string name="notification_title">TodoList News</string>
-    <string name="notification_content">您有一条未完成的待办事项</string>
+    <string name="notification_title">您有一条未完成的待办事项</string>
 
 
 </resources>

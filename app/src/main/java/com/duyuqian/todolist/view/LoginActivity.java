@@ -139,12 +139,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public boolean getLoginStatus() {
-        sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        sharedPref = this.getSharedPreferences(TodoListConstant.LOGIN_STATUS,Context.MODE_PRIVATE);
         return sharedPref.getBoolean(TodoListConstant.LOGIN_STATUS, false);
     }
 
     public void setLoginStatus() {
-        sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        sharedPref = this.getSharedPreferences(TodoListConstant.LOGIN_STATUS,Context.MODE_PRIVATE);
         sharedPref.edit().putBoolean(TodoListConstant.LOGIN_STATUS, true).apply();
     }
 

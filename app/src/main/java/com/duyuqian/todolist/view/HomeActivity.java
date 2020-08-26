@@ -9,11 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.duyuqian.todolist.R;
 import com.duyuqian.todolist.model.task.Task;
@@ -22,7 +20,6 @@ import com.duyuqian.todolist.others.TodoListConstant;
 import com.duyuqian.todolist.viewmodel.TaskViewModel;
 
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -128,65 +125,22 @@ public class HomeActivity extends AppCompatActivity {
         return true;
     }
 
-//    @RequiresApi(api = Build.VERSION_CODES.N)
-//    @Override
-//    public void onItemCheckboxClick(int position) {
-//        //不可用 覆盖
-//        Log.e("TAG", "onItemCheckboxClick: ");
-////        Task taskToUpdate = taskList.get(position);
-////        taskToUpdate.setHasDone(!taskToUpdate.isHasDone());
-////        new Thread(new Runnable() {
-////            @Override
-////            public void run() {
-////                taskViewModel.updateTaskList(taskToUpdate);
-////            }
-////        }).start();
-////
-////        adapter.notifyDataSetChanged();
-////        sortTaskList();
-////        Toast.makeText(HomeActivity.this, "点击成功！", Toast.LENGTH_SHORT).show();
-//    }
-//
-//    @Override
-//    public void onItemClick(int position) {
-//        Log.e("TAG", "onItemClick: ");
-////        Task taskToEdit = taskList.get(position);
-////        Intent intent = new Intent(HomeActivity.this, DetailActivity.class);
-////        intent.putExtra(TodoListConstant.EDIT_TASK_INFO, taskToEdit);
-////        startActivity(intent);
-//    }
-
     private TaskAdapter.OnItemClickListener MyItemClickListener = new TaskAdapter.OnItemClickListener() {
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onItemClick(View view, int position) {
-            switch (view.getId()) {
-                case R.id.item_checkbox:
-                    Toast.makeText(HomeActivity.this, "click checkbox" + (position + 1), Toast.LENGTH_SHORT).show();
-                    Task taskToUpdate = taskList.get(position);
-                    taskToUpdate.setHasDone(!taskToUpdate.isHasDone());
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            taskViewModel.updateTaskList(taskToUpdate);
-                        }
-                    }).start();
-                    adapter.notifyDataSetChanged();
-                    sortTaskList();
-                    break;
-                default:
-                    Toast.makeText(HomeActivity.this, "click item" + (position + 1), Toast.LENGTH_SHORT).show();
-                    Task taskToEdit = taskList.get(position);
-                    Intent intent = new Intent(HomeActivity.this, DetailActivity.class);
-                    intent.putExtra(TodoListConstant.EDIT_TASK_INFO, taskToEdit);
-                    startActivity(intent);
-                    break;
+            if (view.getId() == R.id.item_checkbox) {
+                Task taskToUpdate = taskList.get(position);
+                taskToUpdate.setHasDone(!taskToUpdate.isHasDone());
+                new Thread(() -> taskViewModel.updateTaskList(taskToUpdate)).start();
+                adapter.notifyDataSetChanged();
+                sortTaskList();
+            } else {
+                Task taskToEdit = taskList.get(position);
+                Intent intent = new Intent(HomeActivity.this, DetailActivity.class);
+                intent.putExtra(TodoListConstant.EDIT_TASK_INFO, taskToEdit);
+                startActivity(intent);
             }
-        }
-
-        @Override
-        public void onItemLongClick(View view) {
-
         }
     };
 }

@@ -2,7 +2,6 @@ package com.duyuqian.todolist.model.task;
 
 import android.content.Context;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +62,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         Task task = taskList.get(position);
         holder.hasDone.setChecked(task.isHasDone());
         holder.title.setText(task.getTitle());
-        if (task.isHasDone() == true) {
+        if (task.isHasDone()) {
             holder.title.setTextColor(mContext.getResources().getColor(R.color.remind_color));
             holder.title.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         } else {
@@ -71,22 +70,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             holder.title.setPaintFlags(holder.title.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
         }
         holder.date.setText(new SimpleDateFormat(mContext.getResources().getString(R.string.month_day_format), Locale.getDefault()).format(task.getDateOfRemind()));
-
-//        holder.hasDone.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                switch (v.getId()) {
-//                    case R.id.item_checkbox:
-//                        Log.e("TAG", "onItemCheckboxClick: ");
-//                        mItemClickListener.onItemCheckboxClick(position);
-//                        break;
-//                    default:
-//                        Log.e("TAG", "onItemClick: ");
-//                        mItemClickListener.onItemClick(position);
-//                        break;
-//                }
-//            }
-//        });
     }
 
     @Override
@@ -97,10 +80,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
-
-//        void onItemCheckboxClick(int position);
-
-        void onItemLongClick(View view);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {

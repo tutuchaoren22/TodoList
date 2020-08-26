@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -79,13 +78,26 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
     @OnClick(R.id.finish_button)
     public void onClickFinishBtn() {
         Intent intent = new Intent(this, HomeActivity.class);
-        Task newTask = new Task(title.getText().toString(), description.getText().toString(),
-                hasDone.isChecked(), isReminded.isChecked(), new Date(year - 1900, month, day));
+
         new Thread() {
             @Override
             public void run() {
-                taskViewModel.insertTask(newTask);
-                //也可能是update
+                if (isEditPage) {
+                    //UPDATE TASK IN DB
+                    if (newTask != null) {
+                        newTask.setHasDone(hasDone.isChecked());
+                        newTask.setDateOfRemind(new Date(year - 1900, month, day));
+                        newTask.setReminded(isReminded.isChecked());
+                        newTask.setTitle(title.getText().toString());
+                        newTask.setDescription(description.getText().toString());
+                    }
+                    taskViewModel.updateTaskList(newTask);
+                } else {
+                    //ADD TASK TO DB
+                    newTask = new Task(title.getText().toString(), description.getText().toString(),
+                            hasDone.isChecked(), isReminded.isChecked(), new Date(year - 1900, month, day));
+                    taskViewModel.insertTask(newTask);
+                }
             }
         }.start();
         startActivity(intent);
@@ -102,6 +114,8 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
     boolean isDeadlineSet = false;
     boolean isTitleSet = false;
     private TaskViewModel taskViewModel;
+    private boolean isEditPage;
+    private Task newTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,8 +134,12 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
         Intent intent = getIntent();
         Task taskToEdit = (Task) intent.getSerializableExtra(TodoListConstant.EDIT_TASK_INFO);
         if (taskToEdit != null) {
+            isEditPage = true;
+            newTask = taskToEdit;
+            initDate();
             createEditPage(taskToEdit);
         } else {
+            isEditPage = false;
             initDate();
             updateFinishBtn();
         }
@@ -153,25 +171,36 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
     }
 
     private void initDate() {
-        Calendar calendar = Calendar.getInstance();
-        year = calendar.get(Calendar.YEAR);
-        month = calendar.get(Calendar.MONTH) + 1;
-        day = calendar.get(Calendar.DAY_OF_MONTH);
+        if (isEditPage) {
+            setDate(newTask.getDateOfRemind());
+        } else {
+            setDate(null);
+        }
+
     }
 
     private void createEditPage(Task task) {
         deleteBtn.setVisibility(View.VISIBLE);
         isDeadlineSet = true;
         isTitleSet = true;
-//        updateFinishBtn();
-        //update database
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(task.getDateOfRemind());
+        hasDone.setChecked(task.isHasDone());
         date.setText(String.format(Locale.getDefault(), dateFormatter,
                 calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH)));
         date.setTextColor(selectDateColor);
-
+        isReminded.setChecked(task.isReminded());
         title.setText(task.getTitle());
         description.setText(task.getDescription());
+    }
+
+    private void setDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        if (date != null) {
+            calendar.setTime(date);
+        }
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
     }
 }

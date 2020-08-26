@@ -156,18 +156,16 @@ public class HomeActivity extends AppCompatActivity {
     };
 
     private void updateNotification() {
+        myNotification.cancelAllNotification();
         for (Task task : taskList) {
             if (!task.isHasDone() && task.isReminded() && task.getDateOfRemind().after(new Date())) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(task.getDateOfRemind());
-                calendar.add(Calendar.HOUR, 6);
 //                Calendar calendar = Calendar.getInstance();
-//                calendar.add(Calendar.SECOND, 5);
+//                calendar.setTime(task.getDateOfRemind());
+//                calendar.add(Calendar.HOUR, 6);
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.SECOND, 5);
                 myNotification.sendNotification(this, task.getId(), calendar, notificationTitle, task.getTitle());
-            } else {
-                myNotification.cancelNotification(task.getId());
             }
         }
-
     }
 }

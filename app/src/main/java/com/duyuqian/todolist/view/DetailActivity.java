@@ -19,6 +19,8 @@ import com.duyuqian.todolist.model.task.Task;
 import com.duyuqian.todolist.others.TodoListConstant;
 import com.duyuqian.todolist.viewmodel.TaskViewModel;
 
+import org.junit.internal.runners.statements.RunAfters;
+
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.Locale;
@@ -77,7 +79,6 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
 
     @OnClick(R.id.finish_button)
     public void onClickFinishBtn() {
-        Intent intent = new Intent(this, HomeActivity.class);
 
         new Thread() {
             @Override
@@ -100,8 +101,20 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
                 }
             }
         }.start();
-        startActivity(intent);
-        finish();
+        goToHomePage();
+    }
+
+    @OnClick(R.id.delete_button)
+    public void onClickDeleteBtn() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (newTask != null) {
+                    taskViewModel.deleteTask(newTask);
+                    goToHomePage();
+                }
+            }
+        }).start();
     }
 
     @OnTextChanged(value = R.id.title_input, callback = OnTextChanged.Callback.TEXT_CHANGED)
@@ -201,6 +214,12 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public void goToHomePage() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 }

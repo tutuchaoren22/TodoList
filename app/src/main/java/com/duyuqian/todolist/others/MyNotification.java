@@ -42,8 +42,8 @@ public class MyNotification {
         notificationManager.notify(id, notification);
     }
 
-    public void cancelNotification(int id) {
-        notificationManager.cancel(id);
+    public void cancelAllNotification() {
+        notificationManager.cancelAll();
     }
 
 }

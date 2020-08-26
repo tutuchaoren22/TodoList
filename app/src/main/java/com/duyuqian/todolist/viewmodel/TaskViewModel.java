@@ -36,6 +36,10 @@ public class TaskViewModel extends ViewModel {
         taskRepository.updateTaskList(task);
     }
 
+    public void deleteTask(Task task) {
+        taskRepository.deleteTask(task);
+    }
+
     public static class TaskViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         private final TaskRepository taskRepository;
 

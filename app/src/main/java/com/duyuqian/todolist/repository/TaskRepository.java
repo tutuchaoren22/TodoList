@@ -20,4 +20,8 @@ public class TaskRepository {
     public void updateTaskList(Task task) {
         dataBase.taskDao().updateTask(task);
     }
+
+    public void deleteTask(Task task) {
+        dataBase.taskDao().deleteTask(task);
+    }
 }

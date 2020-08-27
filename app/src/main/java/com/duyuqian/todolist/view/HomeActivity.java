@@ -142,6 +142,7 @@ public class HomeActivity extends AppCompatActivity {
                 new Thread(() -> taskViewModel.updateTaskList(taskToUpdate)).start();
                 taskViewModel.sortTaskList(taskList);
                 adapter.notifyDataSetChanged();
+                updateNotification();
             } else {
                 Task taskToEdit = taskList.get(position);
                 Intent intent = new Intent(HomeActivity.this, DetailActivity.class);
@@ -151,7 +152,9 @@ public class HomeActivity extends AppCompatActivity {
         }
     };
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void updateNotification() {
+        taskList = taskViewModel.getTaskList();
         myNotification.cancelAllNotification();
         for (Task task : taskList) {
             if (!task.isHasDone() && task.isReminded() && task.getDateOfRemind().after(new Date())) {

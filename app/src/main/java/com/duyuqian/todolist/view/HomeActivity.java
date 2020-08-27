@@ -63,9 +63,6 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public static final int SORT_WITH_INCREASE_ORDER = -1;
-    public static final int SORT_WITH_DESCENDING_ORDER = 1;
-    public static final int SORT_WITH_EQUAL = 0;
     private TaskViewModel taskViewModel;
     private List<Task> taskList;
     private TaskAdapter adapter;
@@ -87,7 +84,6 @@ public class HomeActivity extends AppCompatActivity {
                 taskViewModel = viewModelProvider.get(TaskViewModel.class);
                 taskList = taskViewModel.getTaskList();
                 updatePage();
-                sortTaskList();
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                 taskListView.setLayoutManager(layoutManager);
                 adapter = new TaskAdapter(getApplicationContext(), taskList);
@@ -100,8 +96,6 @@ public class HomeActivity extends AppCompatActivity {
                 );
             }
         }.start();
-
-
     }
 
     @Override
@@ -119,21 +113,6 @@ public class HomeActivity extends AppCompatActivity {
         titleOfCount.setText(String.valueOf(taskList.size()).concat(patternOfCounts));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    private void sortTaskList() {
-        Comparator<Task> byHasDone = Comparator.comparing(Task::isHasDone);
-        Comparator<Task> byDateOfRemind = (task1, task2) -> {
-            if (task1.getDateOfRemind().before(task2.getDateOfRemind())) {
-                return SORT_WITH_INCREASE_ORDER;
-            } else if (task1.getDateOfRemind().after(task2.getDateOfRemind())) {
-                return SORT_WITH_DESCENDING_ORDER;
-            } else {
-                return SORT_WITH_EQUAL;
-            }
-        };
-        taskList.sort(byHasDone.thenComparing(byDateOfRemind));
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -143,7 +122,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.sign_out) {
-            SharedPreferences sharedPref = this.getSharedPreferences(TodoListConstant.LOGIN_STATUS,Context.MODE_PRIVATE);
+            SharedPreferences sharedPref = this.getSharedPreferences(TodoListConstant.LOGIN_STATUS, Context.MODE_PRIVATE);
             sharedPref.edit().putBoolean(TodoListConstant.LOGIN_STATUS, false).apply();
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
@@ -160,8 +139,8 @@ public class HomeActivity extends AppCompatActivity {
                 Task taskToUpdate = taskList.get(position);
                 taskToUpdate.setHasDone(!taskToUpdate.isHasDone());
                 new Thread(() -> taskViewModel.updateTaskList(taskToUpdate)).start();
+                taskViewModel.sortTaskList(taskList);
                 adapter.notifyDataSetChanged();
-                sortTaskList();
             } else {
                 Task taskToEdit = taskList.get(position);
                 Intent intent = new Intent(HomeActivity.this, DetailActivity.class);

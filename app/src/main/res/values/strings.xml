@@ -22,6 +22,9 @@
     <string name="pattern_week">EEEE , d</string>
     <string name="pattern_day">th</string>
     <string name="pattern_month">MMMM</string>
+    <string name="description_of_delete_button">this is delete button</string>
+    <string name="description_of_finish_button">this is finish button</string>
+    <string name="description_of_add_button">this is add button</string>
 
 
 </resources>

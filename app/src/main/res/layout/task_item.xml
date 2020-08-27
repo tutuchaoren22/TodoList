@@ -13,12 +13,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="@dimen/vertical_bias_0.05" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/item_margin_right_line"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="@dimen/vertical_bias_0.95" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/home_checkbox_right"
         android:layout_width="wrap_content"
@@ -31,8 +33,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:checked="false"
+        android:paddingVertical="@dimen/checkbox_padding_vertical"
         android:theme="@style/MyCheckBox"
-        android:paddingVertical="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/home_checkbox_right"
         app:layout_constraintStart_toStartOf="@id/item_margin_left_line"
@@ -42,7 +44,7 @@
         android:id="@+id/item_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="@dimen/text_size_date"
         app:layout_constraintBaseline_toBaselineOf="@id/item_checkbox"
         app:layout_constraintEnd_toEndOf="@id/home_title_right"
         app:layout_constraintStart_toEndOf="@id/home_checkbox_right"
@@ -64,12 +66,12 @@
         app:layout_constraintEnd_toEndOf="@id/item_margin_right_line"
         app:layout_constraintStart_toStartOf="@id/home_title_right"
         tools:text="@string/default_date" />
+
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/line_height"
         android:background="@color/gray"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

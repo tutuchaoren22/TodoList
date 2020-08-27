@@ -19,9 +19,7 @@ import com.duyuqian.todolist.model.task.Task;
 import com.duyuqian.todolist.others.TodoListConstant;
 import com.duyuqian.todolist.viewmodel.TaskViewModel;
 
-import org.junit.internal.runners.statements.RunAfters;
-
-import java.sql.Date;
+import java.util.Date;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -79,24 +77,23 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
 
     @OnClick(R.id.finish_button)
     public void onClickFinishBtn() {
-
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
         new Thread() {
             @Override
             public void run() {
                 if (isEditPage) {
-                    //UPDATE TASK IN DB
                     if (newTask != null) {
                         newTask.setHasDone(hasDone.isChecked());
-                        newTask.setDateOfRemind(new Date(year - 1900, month, day));
+                        newTask.setDateOfRemind(calendar.getTime());
                         newTask.setReminded(isReminded.isChecked());
                         newTask.setTitle(title.getText().toString());
                         newTask.setDescription(description.getText().toString());
                     }
                     taskViewModel.updateTaskList(newTask);
                 } else {
-                    //ADD TASK TO DB
                     newTask = new Task(title.getText().toString(), description.getText().toString(),
-                            hasDone.isChecked(), isReminded.isChecked(), new Date(year - 1900, month, day));
+                            hasDone.isChecked(), isReminded.isChecked(), calendar.getTime());
                     taskViewModel.insertTask(newTask);
                 }
             }
@@ -106,13 +103,10 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
 
     @OnClick(R.id.delete_button)
     public void onClickDeleteBtn() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (newTask != null) {
-                    taskViewModel.deleteTask(newTask);
-                    goToHomePage();
-                }
+        new Thread(() -> {
+            if (newTask != null) {
+                taskViewModel.deleteTask(newTask);
+                goToHomePage();
             }
         }).start();
     }
@@ -135,15 +129,8 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
-        TaskViewModel.TaskViewModelFactory factory = new TaskViewModel.TaskViewModelFactory();
-        ViewModelProvider viewModelProvider = new ViewModelProvider(this, factory);
-        new Thread() {
-            @Override
-            public void run() {
-                taskViewModel = viewModelProvider.get(TaskViewModel.class);
-            }
-        }.start();
 
+        initTaskViewModel();
         Intent intent = getIntent();
         Task taskToEdit = (Task) intent.getSerializableExtra(TodoListConstant.EDIT_TASK_INFO);
         if (taskToEdit != null) {
@@ -173,6 +160,17 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
         this.year = year;
         this.month = monthOfYear;
         this.day = dayOfMonth;
+    }
+
+    private void initTaskViewModel() {
+        TaskViewModel.TaskViewModelFactory factory = new TaskViewModel.TaskViewModelFactory();
+        ViewModelProvider viewModelProvider = new ViewModelProvider(this, factory);
+        new Thread() {
+            @Override
+            public void run() {
+                taskViewModel = viewModelProvider.get(TaskViewModel.class);
+            }
+        }.start();
     }
 
     private void updateFinishBtn() {

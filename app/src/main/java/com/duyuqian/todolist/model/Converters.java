@@ -2,7 +2,7 @@ package com.duyuqian.todolist.model;
 
 import androidx.room.TypeConverter;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Converters {
     @TypeConverter

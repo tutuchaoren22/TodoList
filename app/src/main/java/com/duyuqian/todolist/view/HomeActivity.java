@@ -77,6 +77,7 @@ public class HomeActivity extends AppCompatActivity {
         TaskViewModel.TaskViewModelFactory factory = new TaskViewModel.TaskViewModelFactory();
         ViewModelProvider viewModelProvider = new ViewModelProvider(this, factory);
         new Thread() {
+
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void run() {
@@ -131,6 +132,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private TaskAdapter.OnItemClickListener MyItemClickListener = new TaskAdapter.OnItemClickListener() {
+
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onItemClick(View view, int position) {

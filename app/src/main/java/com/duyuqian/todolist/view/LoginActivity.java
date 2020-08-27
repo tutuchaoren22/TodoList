@@ -108,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null){
+        if (actionBar != null) {
             actionBar.hide();
         }
 
@@ -128,8 +128,15 @@ public class LoginActivity extends AppCompatActivity {
 
     public boolean isUserInDB() {
         Map<String, Boolean> isUserInDataBase = loginViewModel.isUserInDB(userNameInput.getText().toString(), passWordInput.getText().toString());
-        boolean hasUserName = isUserInDataBase.containsKey("hasUserName") && isUserInDataBase.get("hasUserName");
-        boolean hasUserPassword = isUserInDataBase.containsKey("hasUserPassword") && isUserInDataBase.get("hasUserPassword");
+        boolean hasUserName = false;
+        boolean hasUserPassword = false;
+        try {
+            hasUserName = isUserInDataBase.containsKey("hasUserName") && isUserInDataBase.get("hasUserName");
+            hasUserPassword = isUserInDataBase.containsKey("hasUserPassword") && isUserInDataBase.get("hasUserPassword");
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
         if (!hasUserName) {
             Toast.makeText(this, wrongUserNameInf, Toast.LENGTH_LONG).show();
         } else if (!hasUserPassword) {
@@ -139,12 +146,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public boolean getLoginStatus() {
-        sharedPref = this.getSharedPreferences(TodoListConstant.LOGIN_STATUS,Context.MODE_PRIVATE);
+        sharedPref = this.getSharedPreferences(TodoListConstant.LOGIN_STATUS, Context.MODE_PRIVATE);
         return sharedPref.getBoolean(TodoListConstant.LOGIN_STATUS, false);
     }
 
     public void setLoginStatus() {
-        sharedPref = this.getSharedPreferences(TodoListConstant.LOGIN_STATUS,Context.MODE_PRIVATE);
+        sharedPref = this.getSharedPreferences(TodoListConstant.LOGIN_STATUS, Context.MODE_PRIVATE);
         sharedPref.edit().putBoolean(TodoListConstant.LOGIN_STATUS, true).apply();
     }
 

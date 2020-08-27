@@ -9,7 +9,6 @@ import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Callback;
@@ -26,13 +25,18 @@ public class LoginRepository {
     public List<User> getUserList() {
         List<User> userList = getUserListFromDataBase();
         if (userList.size() == 0) {
-            userList = requestHttpData();
+            requestHttpData();
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            userList = getUserListFromDataBase();
         }
         return userList;
     }
 
-    private List<User> requestHttpData() {
-        List<User> users = new ArrayList<>();
+    private void requestHttpData() {
         Request request = new Request.Builder()
                 .url(TodoListConstant.URL)
                 .build();
@@ -48,13 +52,11 @@ public class LoginRepository {
                         if (response.isSuccessful() && response.body() != null) {
                             String result = response.body().string();
                             User user = gson.fromJson(result, User.class);
-                            users.add(user);
                             insertLocalSourceData(user);
                         }
                     }
                 }
         );
-        return users;
     }
 
     public List<User> getUserListFromDataBase() {

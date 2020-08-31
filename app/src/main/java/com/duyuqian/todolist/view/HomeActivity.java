@@ -91,7 +91,7 @@ public class HomeActivity extends AppCompatActivity {
                 runOnUiThread(
                         () -> {
                             taskListView.setAdapter(adapter);
-//                            updateNotification();
+                            updateNotification();
                         }
                 );
             }

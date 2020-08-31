@@ -4,6 +4,7 @@
         <item name="colorPrimary">@color/nav_bar_color</item>
         <item name="colorPrimaryDark">@color/nav_bar_color</item>
         <item name="colorAccent">@color/colorOfLoginBtn</item>
+        <item name="android:windowFullscreen">true</item>
         <item name="actionBarStyle">@style/MyActionBar</item>
         <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
     </style>

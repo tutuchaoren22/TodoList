@@ -116,7 +116,7 @@
         android:background="@color/white"
         android:gravity="top"
         android:hint="@string/todo_list_description"
-        android:inputType="text"
+        android:inputType="textMultiLine"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/detail_margin_right_line"
         app:layout_constraintStart_toStartOf="@id/detail_margin_left_line"

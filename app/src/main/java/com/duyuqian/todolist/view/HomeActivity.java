@@ -1,14 +1,13 @@
 package com.duyuqian.todolist.view;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,14 +21,11 @@ import android.widget.TextView;
 import com.duyuqian.todolist.R;
 import com.duyuqian.todolist.model.task.Task;
 import com.duyuqian.todolist.model.task.TaskAdapter;
-import com.duyuqian.todolist.others.AlarmReceiver;
 import com.duyuqian.todolist.others.AlarmUtil;
-import com.duyuqian.todolist.others.MyNotification;
 import com.duyuqian.todolist.others.TodoListConstant;
 import com.duyuqian.todolist.viewmodel.TaskViewModel;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -60,9 +56,10 @@ public class HomeActivity extends AppCompatActivity {
     @OnClick(R.id.add_button)
     public void onClickAddButton() {
         Intent intent = new Intent(HomeActivity.this, DetailActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_AND_RESULT_CODE);
     }
 
+    private static final int REQUEST_AND_RESULT_CODE = 10;
     private TaskViewModel taskViewModel;
     private List<Task> taskList;
     private TaskAdapter adapter;
@@ -89,9 +86,7 @@ public class HomeActivity extends AppCompatActivity {
                 adapter = new TaskAdapter(getApplicationContext(), taskList);
                 adapter.setOnItemClickListener(MyItemClickListener);
                 runOnUiThread(
-                        () -> {
-                            taskListView.setAdapter(adapter);
-                        }
+                        () -> taskListView.setAdapter(adapter)
                 );
             }
         }.start();
@@ -140,7 +135,7 @@ public class HomeActivity extends AppCompatActivity {
                 Task taskToEdit = taskList.get(position);
                 Intent intent = new Intent(HomeActivity.this, DetailActivity.class);
                 intent.putExtra(TodoListConstant.EDIT_TASK_INFO, taskToEdit);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_AND_RESULT_CODE);
             }
         }
     };
@@ -152,6 +147,34 @@ public class HomeActivity extends AppCompatActivity {
             } else {
                 alarmUtil.addNotification(taskToUpdate.getId(), taskToUpdate.getTitle(), taskToUpdate.getDateOfRemind());
             }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_AND_RESULT_CODE && resultCode == REQUEST_AND_RESULT_CODE) {
+            TaskViewModel.TaskViewModelFactory factory = new TaskViewModel.TaskViewModelFactory();
+            ViewModelProvider viewModelProvider = new ViewModelProvider(this, factory);
+            new Thread() {
+
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                public void run() {
+                    taskViewModel = viewModelProvider.get(TaskViewModel.class);
+                    taskList = taskViewModel.getTaskList();
+                    updatePage();
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                    HomeActivity.this.runOnUiThread(
+                            () -> {
+                                taskListView.setLayoutManager(layoutManager);
+                                adapter = new TaskAdapter(getApplicationContext(), taskList);
+                                adapter.setOnItemClickListener(MyItemClickListener);
+                                taskListView.setAdapter(adapter);
+                            }
+                    );
+                }
+            }.start();
         }
     }
 }

@@ -128,6 +128,7 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
     private boolean isEditPage;
     private Task newTask;
     private AlarmUtil alarmUtil = new AlarmUtil();
+    private static final int REQUEST_AND_RESULT_CODE = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,8 +211,7 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
     }
 
     public void goToHomePage() {
-        Intent intent = new Intent(this, HomeActivity.class);
-        startActivity(intent);
+        setResult(REQUEST_AND_RESULT_CODE);
         finish();
     }
 

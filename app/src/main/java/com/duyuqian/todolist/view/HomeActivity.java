@@ -26,6 +26,7 @@ import com.duyuqian.todolist.others.TodoListConstant;
 import com.duyuqian.todolist.viewmodel.TaskViewModel;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -46,8 +47,14 @@ public class HomeActivity extends AppCompatActivity {
     TextView titleOfCount;
     @BindString(R.string.pattern_week)
     String patternOfWeek;
-    @BindString(R.string.pattern_day)
-    String patternOfDay;
+    @BindString(R.string.pattern_day_default)
+    String patternOfDayDefault;
+    @BindString(R.string.pattern_day_mod_one)
+    String patternOfDayModOne;
+    @BindString(R.string.pattern_day_two)
+    String patternOfDayTwo;
+    @BindString(R.string.pattern_day_three)
+    String patternOfDayThree;
     @BindString(R.string.pattern_month)
     String patternOfMonth;
     @BindString(R.string.tasks_count)
@@ -94,9 +101,23 @@ public class HomeActivity extends AppCompatActivity {
 
     private void updatePage() {
         Date today = new Date();
-        titleOfWeekDay.setText(new SimpleDateFormat(patternOfWeek, Locale.ENGLISH).format(today).concat(patternOfDay));
+        titleOfWeekDay.setText(new SimpleDateFormat(patternOfWeek, Locale.ENGLISH).format(today).concat(shortFormatOfDate()));
         titleOfMonth.setText(new SimpleDateFormat(patternOfMonth, Locale.ENGLISH).format(today));
         titleOfCount.setText(String.valueOf(taskList.size()).concat(patternOfCounts));
+    }
+
+    private String shortFormatOfDate() {
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        if (1 == day % 10) {
+            return patternOfDayModOne;
+        } else if (2 == day) {
+            return patternOfDayTwo;
+        } else if (3 == day) {
+            return patternOfDayThree;
+        } else {
+            return patternOfDayDefault;
+        }
     }
 
     @Override

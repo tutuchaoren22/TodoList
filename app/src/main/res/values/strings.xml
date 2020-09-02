@@ -20,7 +20,10 @@
     <string name="todo_list_description">描述....</string>
     <string name="tasks_count">个任务</string>
     <string name="pattern_week">EEEE , d</string>
-    <string name="pattern_day">th</string>
+    <string name="pattern_day_mod_one">st</string>
+    <string name="pattern_day_two">nd</string>
+    <string name="pattern_day_three">rd</string>
+    <string name="pattern_day_default">th</string>
     <string name="pattern_month">MMMM</string>
     <string name="description_of_delete_button">this is delete button</string>
     <string name="description_of_finish_button">this is finish button</string>

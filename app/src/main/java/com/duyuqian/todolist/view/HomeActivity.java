@@ -23,6 +23,7 @@ import com.duyuqian.todolist.R;
 import com.duyuqian.todolist.model.task.Task;
 import com.duyuqian.todolist.model.task.TaskAdapter;
 import com.duyuqian.todolist.others.AlarmReceiver;
+import com.duyuqian.todolist.others.AlarmUtil;
 import com.duyuqian.todolist.others.MyNotification;
 import com.duyuqian.todolist.others.TodoListConstant;
 import com.duyuqian.todolist.viewmodel.TaskViewModel;
@@ -65,14 +66,13 @@ public class HomeActivity extends AppCompatActivity {
     private TaskViewModel taskViewModel;
     private List<Task> taskList;
     private TaskAdapter adapter;
-    private MyNotification myNotification;
+    private AlarmUtil alarmUtil = new AlarmUtil();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-        myNotification = new MyNotification(this);
 
         TaskViewModel.TaskViewModelFactory factory = new TaskViewModel.TaskViewModelFactory();
         ViewModelProvider viewModelProvider = new ViewModelProvider(this, factory);
@@ -91,7 +91,6 @@ public class HomeActivity extends AppCompatActivity {
                 runOnUiThread(
                         () -> {
                             taskListView.setAdapter(adapter);
-                            updateNotification();
                         }
                 );
             }
@@ -135,6 +134,7 @@ public class HomeActivity extends AppCompatActivity {
                         taskViewModel.updateTaskList(taskToUpdate)
                 ).start();
                 taskViewModel.sortTaskList(taskList);
+                updateNotification(taskToUpdate);
                 adapter.notifyDataSetChanged();
             } else {
                 Task taskToEdit = taskList.get(position);
@@ -145,18 +145,12 @@ public class HomeActivity extends AppCompatActivity {
         }
     };
 
-    private void updateNotification() {
-        myNotification.cancelAllNotification();
-        for (Task task : taskList) {
-            if (!task.isHasDone() && task.isReminded() && task.getDateOfRemind().after(new Date())) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(task.getDateOfRemind());
-                calendar.add(Calendar.HOUR_OF_DAY, TodoListConstant.ALARM_HOUR);
-                Intent intent = new Intent(this, AlarmReceiver.class);
-                intent.setAction(TodoListConstant.INTENT_NOTIFICATION_ACTION);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+    private void updateNotification(Task taskToUpdate) {
+        if (taskToUpdate.isReminded()) {
+            if (taskToUpdate.isHasDone()) {
+                alarmUtil.cancelNotificationById(taskToUpdate.getId());
+            } else {
+                alarmUtil.addNotification(taskToUpdate.getId(), taskToUpdate.getTitle(), taskToUpdate.getDateOfRemind());
             }
         }
     }

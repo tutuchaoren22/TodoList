@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.duyuqian.todolist.R;
 import com.duyuqian.todolist.model.task.Task;
+import com.duyuqian.todolist.others.AlarmUtil;
 import com.duyuqian.todolist.others.TodoListConstant;
 import com.duyuqian.todolist.viewmodel.TaskViewModel;
 
@@ -91,10 +92,12 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
                         newTask.setDescription(description.getText().toString());
                     }
                     taskViewModel.updateTaskList(newTask);
+                    updateNotification(newTask);
                 } else {
                     newTask = new Task(title.getText().toString(), description.getText().toString(),
                             hasDone.isChecked(), isReminded.isChecked(), calendar.getTime());
                     taskViewModel.insertTask(newTask);
+                    alarmUtil.addNotification(newTask.getId(), newTask.getTitle(), newTask.getDateOfRemind());
                 }
             }
         }.start();
@@ -106,6 +109,7 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
         new Thread(() -> {
             if (newTask != null) {
                 taskViewModel.deleteTask(newTask);
+                alarmUtil.cancelNotificationById(newTask.getId());
                 goToHomePage();
             }
         }).start();
@@ -123,6 +127,7 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
     private TaskViewModel taskViewModel;
     private boolean isEditPage;
     private Task newTask;
+    private AlarmUtil alarmUtil = new AlarmUtil();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,4 +215,13 @@ public class DetailActivity extends AppCompatActivity implements DatePicker.OnDa
         finish();
     }
 
+    private void updateNotification(Task taskToUpdate) {
+        if (taskToUpdate.isReminded()) {
+            if (taskToUpdate.isHasDone()) {
+                alarmUtil.cancelNotificationById(taskToUpdate.getId());
+            } else {
+                alarmUtil.addNotification(taskToUpdate.getId(), taskToUpdate.getTitle(), taskToUpdate.getDateOfRemind());
+            }
+        }
+    }
 }

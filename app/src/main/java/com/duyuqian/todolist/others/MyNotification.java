@@ -17,14 +17,13 @@ import com.duyuqian.todolist.view.HomeActivity;
 import java.util.Calendar;
 
 public class MyNotification {
-    public static final int NOTIFY_ID = 1;
     private NotificationManagerCompat notificationManager;
 
     public MyNotification(Context context) {
         this.notificationManager = NotificationManagerCompat.from(context);
     }
 
-    public void sendNotification(Context context) {
+    public void sendNotification(Context context, String title, int id) {
         if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel(TodoListConstant.CHANNEL_ID, TodoListConstant.CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
             notificationManager.createNotificationChannel(notificationChannel);
@@ -35,16 +34,15 @@ public class MyNotification {
         Notification notification = builder.setSmallIcon(R.drawable.ic_todo_list)
                 .setWhen(Calendar.getInstance().getTimeInMillis())
                 .setContentTitle(TodoListConstant.NOTIFICATION_TITLE)
-                .setContentText(TodoListConstant.NOTIFICATION_CONTENT)
+                .setContentText(title)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
                 .build();
-        notificationManager.notify(NOTIFY_ID, notification);
+        notificationManager.notify(id, notification);
     }
 
-    public void cancelAllNotification() {
-        notificationManager.cancelAll();
+    public void cancelNotificationById(int id) {
+        notificationManager.cancel(id);
     }
-
 }
